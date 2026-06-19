@@ -1,0 +1,31 @@
+[
+    {
+        "key": "project-summary",
+        "title": "Project Summary",
+        "para": "The National Rabies Elimination Program in Bangladesh, supported by GroupMappers, focuses on achieving herd immunity and controlling rabies through mass dog vaccination. GroupMappers plays a crucial role in ensuring the vaccination of at least 70% of dogs across the country.\n\nThe program includes training for animal control staff, digital map making, evaluation programs, and training on dog catching and vaccination. It has significantly impacted people’s perception of animal welfare and increased awareness about anti-rabies vaccines and treatment. The program has made substantial progress in eliminating rabies and safeguarding public health in Bangladesh.\n\n__Client:__ National Rabies Elimination Program, CDC, DGHS",
+        "img":[
+            "/assets/images/18.GroupMappers-Showcase.jpg",
+            "/assets/images/rabies.jpg"
+        ]
+    },
+    {
+        "key": "animal-control-staff-training-2018-ongoing",
+        "title": "Animal Control Staff Training",
+        "para": "A training program to assist with Rabies Elimination Program, Bangladesh. The purpose of this project was to offer practical instruction to the staff who are responsible for administering the vaccines and entering the dog vaccination data. It takes place upazila-wise once a year before MDV campaigns to train the staffs related to vaccine."
+    },
+    {
+        "key": "digital-map-making-and-demarcation-of-union-boundary-2020",
+        "title": "Digital map making and demarcation of union boundary",
+        "para": "A project to create digital maps for a mass dog vaccination program. "
+    },
+    {
+        "key": "cdc-atlanta-training-2018",
+        "title": "CDC Atlanta Training",
+        "para": "This project assisted the Centers for Disease Control and Prevention (CDC) Atlanta, USA in a study based on oral bait preference for dog vaccination in Bangladesh."
+    },
+    {
+        "key": "four-day-introductory-training-on-dog-catching-vaccination-for-national-team-2021",
+        "title": "Four Day Introductory Training on Dog Catching & Vaccination for National Team",
+        "para": "A training program for dog catching and vaccination with FAO."
+    }
+]
