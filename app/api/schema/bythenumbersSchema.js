@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const bythenumbersSchema = new mongoose.Schema(
     {
+        key: {
+            type: String,
+            required: true,
+            unique: true
+        },
         icon: {
             type: String,
             required: true,

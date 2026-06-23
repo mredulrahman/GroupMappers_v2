@@ -35,8 +35,8 @@ function normalizeItems() {
   const statItems = statItemsData.statItems.map((item) => ({
     type: "bytheNumbers",
     body: item.label,
-    slug: item.id.toString(),
-    title: `item-${item.id.toString()}`,
+    slug: item.key,
+    title: item.key,
     status: "published",
     images: item.icon,
     summary: item.value,

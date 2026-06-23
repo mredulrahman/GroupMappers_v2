@@ -40,15 +40,23 @@ function mapProfileToItem(p) {
     };
 }
 
-export async function GET() {
+export async function GET(_request) {
     try {
-        // Read from profile.json as the primary source
-        const profileData = getProfileData();
+        // await connectMongo();
+        const profileData = await TeamMember.find({}).lean();
         const items = profileData.map(mapProfileToItem);
+
+        console.log("items from DB");
 
         return NextResponse.json(
             { success: true, items },
-            { status: 200 }
+            {
+                status: 200,
+                headers: {
+                    "Cache-Control": "no-store, max-age=0",
+                },
+                isItDB: true
+            }
         );
     } catch (error) {
         return NextResponse.json(

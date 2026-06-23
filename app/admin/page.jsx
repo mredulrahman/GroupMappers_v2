@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import {
   Upload, Link, Trash2, GripVertical, Pencil, X, Check, ChevronsUpDown
 } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const contentTypes = [
   "page",
@@ -43,6 +46,7 @@ function formFromItem(item) {
     slug: item.slug || "",
     title: item.title || "",
     status: item.status || "draft",
+    updatedAt: item.updatedAt,
     summary: item.summary || "",
     body: item.body || "",
     images,
@@ -308,6 +312,21 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const getPreviewUrl = (type, slug) => {
+    if (!slug) return "/";
+    switch (type) {
+      case "page": return `/${slug}`;
+      case "news": return `/news/${slug}`;
+      case "project": return `/projects/${slug}`;
+      case "activity": return `/activities/${slug}`;
+      case "teamMember": return `/team`;
+      case "galleryItem": return `/gallery`;
+      default: return `/${slug}`;
+    }
+  };
 
 
   const headers = {
@@ -326,6 +345,43 @@ export default function AdminPage() {
       case 'archived': return '#6b7280';
       default: return '';
     }
+  }
+
+  const handleStatusToast = (status) => {
+    switch (status) {
+      case "draft":
+        toast.info("Status changed to Draft");
+        break;
+
+      case "published":
+        toast.success("Content published successfully");
+        break;
+
+      case "archived":
+        toast.warning("Content moved to archive");
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  function timeAgo(date) {
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    const intervals = {
+      year: 31536000,
+      month: 2592000,
+      day: 86400,
+      hour: 3600,
+      minute: 60,
+    };
+    for (const key in intervals) {
+      const value = Math.floor(seconds / intervals[key]);
+      if (value >= 1) {
+        return `${value} ${key}${value > 1 ? "s" : ""} ago`;
+      }
+    }
+    return "just now";
   }
 
   async function loadItems() {
@@ -383,6 +439,7 @@ export default function AdminPage() {
     }
 
     setSelectedId(data.item._id);
+    setIsCreating(false);
     setForm(formFromItem(data.item));
     setMessage("Saved.");
     await loadItems();
@@ -406,6 +463,7 @@ export default function AdminPage() {
     }
 
     setSelectedId(null);
+    setIsCreating(false);
     setForm(emptyForm);
     setMessage("Deleted.");
     await loadItems();
@@ -430,261 +488,401 @@ export default function AdminPage() {
 
   function selectItem(item) {
     setSelectedId(item._id);
+    setIsCreating(false);
     setForm(formFromItem(item));
     setMessage("");
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-blue-700">
-              GroupMappers CMS
-            </p>
-            <h1 className="text-2xl font-bold">Content Admin</h1>
-          </div>
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+      />
+      <main className="h-screen bg-slate-50 text-slate-950 flex flex-col overflow-hidden">
+        <section className="border-b border-slate-200 bg-white flex-shrink-0 z-20">
+          <div className="flex flex-col gap-4 px-6 py-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-blue-700">
+                GroupMappers CMS
+              </p>
+              <h1 className="text-2xl font-bold">Content Admin</h1>
+            </div>
 
-          <div className="relative group">
-            <button className="rounded-full overflow-hidden transition-all">
-              <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 7.063C16.5 10.258 14.57 13 12 13c-2.572 0-4.5-2.742-4.5-5.938C7.5 3.868 9.16 2 12 2s4.5 1.867 4.5 5.063zM4.102 20.142C4.487 20.6 6.145 22 12 22c5.855 0 7.512-1.4 7.898-1.857a.416.416 0 0 0 .09-.317C19.9 18.944 19.106 15 12 15s-7.9 3.944-7.989 4.826a.416.416 0 0 0 .091.317z" fill="#000000" /></svg>
-            </button>
+            <div className="relative group">
+              <button className="rounded-full overflow-hidden transition-all">
+                <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M16.5 7.063C16.5 10.258 14.57 13 12 13c-2.572 0-4.5-2.742-4.5-5.938C7.5 3.868 9.16 2 12 2s4.5 1.867 4.5 5.063zM4.102 20.142C4.487 20.6 6.145 22 12 22c5.855 0 7.512-1.4 7.898-1.857a.416.416 0 0 0 .09-.317C19.9 18.944 19.106 15 12 15s-7.9 3.944-7.989 4.826a.416.416 0 0 0 .091.317z" fill="#000000" /></svg>
+              </button>
 
-            <div className="absolute right-0 top-full w-48 pt-2 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150">
-              <div className="bg-white border border-slate-200 rounded shadow-lg py-1">
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-blue-400"
-                  onClick={() => {
-                    setShowUserMenu(false);
-                    router.push("/admin/settings");
-                  }}
-                >
-                  Settings
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-blue-400"
-                  onClick={() => router.push("/admin/cms-login")}
-                >
-                  Logout
-                </button>
+              <div className="absolute right-0 top-full w-48 pt-2 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150">
+                <div className="bg-white border border-slate-200 rounded shadow-lg py-1">
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-blue-400"
+                    onClick={() => {
+                      router.push("/admin/settings");
+                    }}
+                  >
+                    Settings
+                  </button>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-blue-400"
+                    onClick={() => router.push("/admin/cms-login")}
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[320px_1fr]">
-        <aside className="rounded border border-slate-200 bg-white">
-          <div className="flex items-center gap-2 border-b border-slate-200 p-3">
-            <select
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-              className="min-w-0 flex-1 rounded border border-slate-300 px-2 py-2 text-sm"
-            >
-              <option value="">All types</option>
-              {contentTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => loadItems()}
-              className="rounded border border-slate-300 px-3 py-2 text-sm"
-              type="button"
-            >
-              Load
-            </button>
-          </div>
-
-          <button
-            onClick={handleSeed}
-            className="w-full border-b border-slate-200 px-3 py-3 text-left text-sm font-semibold text-slate-700"
-            type="button"
-          >
-            Import existing JSON
-          </button>
-
-          <button
-            onClick={() => {
-              setSelectedId(null);
-              setForm(emptyForm);
-            }}
-            className="w-full border-b border-slate-200 px-3 py-3 text-left text-sm font-semibold text-blue-700"
-            type="button"
-          >
-            New content
-          </button>
-
-          <div className="max-h-[70vh] overflow-auto">
-            {items.map((item) => (
+        <section className="flex-1 overflow-hidden flex">
+          {/* PANE 1: Content Types */}
+          <aside className="w-56 bg-white border-r border-slate-200 flex flex-col flex-shrink-0 z-10">
+            <div className="p-4 border-b border-slate-200 font-semibold text-slate-800">
+              Content Types
+            </div>
+            <div className="flex-1 overflow-y-auto py-2">
               <button
-                key={item._id}
-                onClick={() => selectItem(item)}
-                className={`block w-full border-b border-slate-100 px-3 py-3 text-left text-sm ${selectedId === item._id ? "bg-blue-50" : "hover:bg-slate-50"
-                  }`}
-                type="button"
+                onClick={() => { setFilter(""); setSelectedId(null); setIsCreating(false); }}
+                className={`w-full text-left px-4 py-2 text-sm ${filter === "" ? "bg-blue-50 text-blue-700 font-medium" : "text-slate-600 hover:bg-slate-50"}`}
               >
-                <span className="block font-semibold">{item.title}</span>
-                <span className="block text-xs text-slate-500">
-                  {item.type} / {item.slug} / {item.status}
-                </span>
+                All types
               </button>
-            ))}
-          </div>
-        </aside>
-
-        <form onSubmit={handleSubmit} className="grid items-start gap-6 lg:grid-cols-[1fr_300px]">
-          {/* Main Form Column */}
-          <div className="rounded border border-slate-200 bg-white p-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="grid gap-1 text-sm font-medium">
-                Type
-                <select
-                  value={form.type}
-                  onChange={(event) => setForm({ ...form, type: event.target.value })}
-                  className="rounded border border-slate-300 px-3 py-2"
-                >
-                  {contentTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="grid gap-1 text-sm font-medium">
-                Slug
-                <input
-                  value={form.slug}
-                  onChange={(event) => setForm({ ...form, slug: event.target.value })}
-                  className="rounded border border-slate-300 px-3 py-2"
-                  placeholder="example-page"
-                />
-              </label>
-            </div>
-
-            <label className="mt-4 grid gap-1 text-sm font-medium">
-              Title
-              <input
-                value={form.title}
-                onChange={(event) => setForm({ ...form, title: event.target.value })}
-                className="rounded border border-slate-300 px-3 py-2"
-              />
-            </label>
-
-            <label className="mt-4 grid gap-1 text-sm font-medium">
-              Summary
-              <textarea
-                value={form.summary}
-                onChange={(event) => setForm({ ...form, summary: event.target.value })}
-                className="min-h-20 rounded border border-slate-300 px-3 py-2"
-              />
-            </label>
-
-            <label className="mt-4 grid gap-1 text-sm font-medium">
-              Body
-              <textarea
-                value={form.body}
-                onChange={(event) => setForm({ ...form, body: event.target.value })}
-                className="min-h-72 rounded border border-slate-300 px-3 py-2 font-mono text-sm"
-                placeholder="Markdown or page content"
-              />
-            </label>
-
-            <ImageManager
-              images={form.images}
-              onChange={(images) => setForm({ ...form, images })}
-            />
-
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              <label className="grid gap-1 text-sm font-medium">
-                SEO Title
-                <input
-                  value={form.seoTitle}
-                  onChange={(event) => setForm({ ...form, seoTitle: event.target.value })}
-                  className="rounded border border-slate-300 px-3 py-2"
-                />
-              </label>
-
-              <label className="grid gap-1 text-sm font-medium">
-                SEO Description
-                <input
-                  value={form.seoDescription}
-                  onChange={(event) =>
-                    setForm({ ...form, seoDescription: event.target.value })
-                  }
-                  className="rounded border border-slate-300 px-3 py-2"
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Right Sidebar Column */}
-          <aside className="rounded border border-slate-200 bg-white p-4 flex flex-col gap-6">
-            <div className="grid gap-1 text-sm font-medium">
-              Status
-              <div className="relative">
+              {contentTypes.map((type) => (
                 <button
-                  type="button"
-                  onClick={() => setIsStatusOpen(!isStatusOpen)}
-                  style={{ backgroundColor: handleStatusColor(form.status) }}
-                  className="w-full rounded border border-slate-300 px-3 py-2 text-left text-white flex justify-between items-center"
+                  key={type}
+                  onClick={() => { setFilter(type); setSelectedId(null); setIsCreating(false); }}
+                  className={`w-full text-left px-4 py-2 text-sm capitalize ${filter === type ? "bg-blue-50 text-blue-700 font-medium" : "text-slate-600 hover:bg-slate-50"}`}
                 >
-                  <span>{form.status}</span>
-                  <ChevronsUpDown className="w-4 h-4" strokeWidth={2} />
+                  {type}
                 </button>
+              ))}
+            </div>
+          </aside>
 
-                {isStatusOpen && (
+          {/* PANE 2: Middle Area */}
+          <div className="flex-1 bg-slate-50 flex flex-col overflow-hidden relative">
+
+            {/* Breadcrumb Header */}
+            <div className="flex items-center justify-between px-6 py-3 bg-white border-b border-slate-200 flex-shrink-0 z-10 min-h-[56px]">
+              <div className="flex items-center gap-2 text-sm">
+                <button
+                  onClick={() => { setFilter(""); setSelectedId(null); setIsCreating(false); }}
+                  className="text-slate-500 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Content
+                </button>
+                {filter && (
                   <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setIsStatusOpen(false)}
-                    />
-                    <ul className="absolute z-20 mt-1 w-full rounded-md border border-slate-200 bg-white p-1 shadow-lg flex flex-col gap-1">
-                      {["draft", "published", "archived"].map((status) => (
-                        <li key={status}>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setForm({ ...form, status });
-                              setIsStatusOpen(false);
-                            }}
-                            className="w-full rounded-md px-3 py-2 text-left text-sm text-slate-900 hover:bg-slate-200 transition-colors"
-                          >
-                            {status}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                    <span className="text-slate-400">/</span>
+                    <button
+                      onClick={() => { setSelectedId(null); setIsCreating(false); }}
+                      className={`capitalize transition-colors ${selectedId || isCreating ? "text-slate-500 hover:text-blue-600 font-medium" : "text-slate-900 font-semibold"}`}
+                    >
+                      {filter}
+                    </button>
+                  </>
+                )}
+                {selectedId && !isCreating && (
+                  <>
+                    <span className="text-slate-400">/</span>
+                    <span className="font-semibold text-slate-900 truncate max-w-[300px]">
+                      {form.title || "Untitled"}
+                    </span>
+                  </>
+                )}
+                {isCreating && (
+                  <>
+                    <span className="text-slate-400">/</span>
+                    <span className="font-semibold text-slate-900 truncate max-w-[300px]">
+                      New {form.type}
+                    </span>
                   </>
                 )}
               </div>
-            </div>
 
-            <div>
-              {message && <p className="mb-4 text-sm font-medium text-blue-700">{message}</p>}
-              <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-3">
                 <button
-                  disabled={isSaving}
-                  className="w-full rounded bg-blue-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+                  type="button"
+                  onClick={() => setShowPreview(!showPreview)}
+                  className={`rounded px-4 py-1.5 text-sm font-medium transition-colors ${showPreview ? "bg-slate-200 text-slate-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}`}
                 >
-                  {isSaving ? "Saving..." : "Save"}
+                  {showPreview ? "Hide Preview" : "Preview"}
                 </button>
-                {selectedId && (
-                  <button
-                    onClick={handleDelete}
-                    className="w-full rounded border border-red-300 px-4 py-2 text-sm font-semibold text-red-700"
-                    type="button"
-                  >
-                    Delete
-                  </button>
-                )}
               </div>
             </div>
-          </aside>
-        </form>
-      </section>
-    </main>
+
+            {/* Main Scrollable Area */}
+            <div className="flex-1 overflow-y-auto">
+              {!selectedId && !isCreating ? (
+                /* --- LIST VIEW --- */
+                <div className="p-6 max-w-6xl mx-auto flex flex-col gap-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h2 className="text-2xl font-bold text-slate-800 capitalize">
+                      {filter ? `${filter} Items` : "All Content"}
+                    </h2>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleSeed}
+                        className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+                        type="button"
+                      >
+                        Import JSON
+                      </button>
+                      <button
+                        onClick={() => loadItems()}
+                        className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+                        type="button"
+                      >
+                        Reload
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedId(null);
+                          setIsCreating(true);
+                          setForm({ ...emptyForm, type: filter || "page" });
+                        }}
+                        className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
+                        type="button"
+                      >
+                        + New {filter ? filter : "content"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {items.length === 0 ? (
+                    <div className="bg-white rounded-lg border border-slate-200 p-12 text-center shadow-sm">
+                      <div className="text-slate-400 mb-2">
+                        <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                      </div>
+                      <h3 className="text-lg font-medium text-slate-900">No items found</h3>
+                      <p className="text-slate-500 mt-1">Get started by creating a new item or importing existing data.</p>
+                    </div>
+                  ) : (
+                    <div className={`grid grid-cols-1 gap-4 ${showPreview ? "xl:grid-cols-3 lg:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
+                      {items.map((item) => (
+                        <div
+                          key={item._id}
+                          onClick={() => selectItem(item)}
+                          className="group bg-white rounded-lg border border-slate-200 p-4 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all flex flex-col h-[140px]"
+                        >
+                          <div className="flex-1 min-h-0">
+                            <h3 className="font-semibold text-slate-900 truncate group-hover:text-blue-700 transition-colors">
+                              {item.title || "Untitled"}
+                            </h3>
+                            <p className="text-sm text-slate-500 mt-1 line-clamp-2">
+                              {item.summary || item.slug || "No summary provided."}
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 flex-shrink-0">
+                            <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                              {item.type}
+                            </span>
+                            <span className="text-xs font-medium px-2 py-1 rounded capitalize" style={{ color: handleStatusColor(item.status), backgroundColor: `${handleStatusColor(item.status)}15` }}>
+                              {item.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* --- FORM VIEW --- */
+                <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-max">
+                  {/* Sticky Form Action Bar */}
+                  <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-6 py-3 border-b border-slate-200 shadow-sm flex-shrink-0">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={() => setIsStatusOpen(!isStatusOpen)}
+                          style={{ backgroundColor: handleStatusColor(form.status) }}
+                          className="rounded border border-slate-300 px-3 py-1.5 text-sm text-white flex items-center gap-2 min-w-[120px] justify-between shadow-sm"
+                        >
+                          <span className="capitalize">{form.status}</span>
+                          <ChevronsUpDown className="w-3 h-3" strokeWidth={2} />
+                        </button>
+
+                        {isStatusOpen && (
+                          <>
+                            <div
+                              className="fixed inset-0 z-10"
+                              onClick={() => setIsStatusOpen(false)}
+                            />
+                            <ul className="absolute left-0 z-20 mt-1 w-full rounded-md border border-slate-200 bg-white p-1 shadow-lg flex flex-col gap-1">
+                              {["draft", "published", "archived"].map((status) => (
+                                <li key={status}>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setForm({ ...form, status });
+                                      setIsStatusOpen(false);
+                                    }}
+                                    className="w-full rounded-md px-3 py-1.5 text-left text-sm text-slate-900 hover:bg-slate-100 transition-colors capitalize"
+                                  >
+                                    {status}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </div>
+                      {form.updatedAt && (
+                        <span className="text-xs text-slate-500 hidden sm:inline-block">
+                          Updated {timeAgo(form.updatedAt)}
+                        </span>
+                      )}
+                      {message && <span className="text-sm font-medium text-blue-600">{message}</span>}
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleDelete}
+                        className="rounded border border-red-200 px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors bg-white shadow-sm"
+                        type="button"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        disabled={isSaving}
+                        onClick={() => handleStatusToast(form.status)}
+                        className="rounded bg-blue-600 px-6 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm"
+                        type="submit"
+                      >
+                        {isSaving ? "Saving..." : "Save"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Form Content */}
+                  <div className="p-6 max-w-3xl mx-auto w-full flex flex-col gap-6 pb-12">
+                    <div className={`grid gap-4 ${showPreview ? "xl:grid-cols-2" : "md:grid-cols-2"}`}>
+                      <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                        Type
+                        <select
+                          value={form.type}
+                          onChange={(event) => setForm({ ...form, type: event.target.value })}
+                          className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white"
+                        >
+                          {contentTypes.map((type) => (
+                            <option key={type} value={type}>
+                              {type}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                        Slug
+                        <input
+                          value={form.slug}
+                          onChange={(event) => setForm({ ...form, slug: event.target.value })}
+                          className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white"
+                          placeholder="example-page"
+                        />
+                      </label>
+                    </div>
+
+                    <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                      Title
+                      <input
+                        value={form.title}
+                        onChange={(event) => setForm({ ...form, title: event.target.value })}
+                        className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-lg bg-white"
+                      />
+                    </label>
+
+                    <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                      Summary
+                      <textarea
+                        value={form.summary}
+                        onChange={(event) => setForm({ ...form, summary: event.target.value })}
+                        className="min-h-[80px] rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white"
+                      />
+                    </label>
+
+                    <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                      Body
+                      <textarea
+                        value={form.body}
+                        onChange={(event) => setForm({ ...form, body: event.target.value })}
+                        className="min-h-[400px] rounded-md border border-slate-300 px-3 py-2 shadow-sm font-mono text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none resize-y bg-white"
+                        placeholder="Markdown or HTML content..."
+                      />
+                    </label>
+
+                    <div className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
+                      <ImageManager
+                        images={form.images}
+                        onChange={(images) => setForm({ ...form, images })}
+                      />
+                    </div>
+
+                    <div className={`rounded-md border border-slate-200 bg-white p-4 shadow-sm grid gap-4 ${showPreview ? "xl:grid-cols-2" : "md:grid-cols-2"}`}>
+                      <div className="col-span-full">
+                        <h3 className="font-semibold text-slate-800 text-sm">SEO Metadata</h3>
+                      </div>
+                      <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                        SEO Title
+                        <input
+                          value={form.seoTitle}
+                          onChange={(event) => setForm({ ...form, seoTitle: event.target.value })}
+                          className="rounded-md border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                        />
+                      </label>
+
+                      <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                        SEO Description
+                        <input
+                          value={form.seoDescription}
+                          onChange={(event) =>
+                            setForm({ ...form, seoDescription: event.target.value })
+                          }
+                          className="rounded-md border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+
+          {/* PANE 3: Preview */}
+          {showPreview && (
+            <aside className="w-[450px] border-l border-slate-300 bg-slate-100 flex flex-col z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.1)] flex-shrink-0">
+              <div className="p-3 border-b border-slate-300 bg-slate-200 flex items-center justify-between shadow-sm">
+                <span className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  Live Preview
+                </span>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="p-1 rounded text-slate-500 hover:bg-slate-300 hover:text-slate-800 transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="flex-1 bg-white relative">
+                <iframe
+                  src={getPreviewUrl(form.type, form.slug)}
+                  className="absolute inset-0 w-full h-full border-0 bg-white"
+                  title="Frontend Preview"
+                />
+              </div>
+            </aside>
+          )}
+
+        </section>
+      </main>
+    </>
   );
 }

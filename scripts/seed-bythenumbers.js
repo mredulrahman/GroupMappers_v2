@@ -66,6 +66,7 @@ async function seed() {
         console.log(typeof statItems);
         console.log(statItems);
         const stats = statItems.map((statItem) => ({
+            key: statItem.key,
             icon: statItem.icon,
             value: statItem.value,
             label: statItem.label,
