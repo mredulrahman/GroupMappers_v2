@@ -25,7 +25,7 @@ function saveProfileData(data) {
  */
 function mapProfileToItem(p) {
     return {
-        _id: p.key,
+        _id: String(p._id || p.id || p.key),
         type: "teamMember",
         slug: p.key,
         title: p.name,
@@ -42,20 +42,18 @@ function mapProfileToItem(p) {
 
 export async function GET(_request) {
     try {
-        // await connectMongo();
+        await connectMongo();
         const profileData = await TeamMember.find({}).lean();
         const items = profileData.map(mapProfileToItem);
 
-        console.log("items from DB");
-
         return NextResponse.json(
-            { success: true, items },
+            { success: true, profileData, items },
             {
                 status: 200,
                 headers: {
                     "Cache-Control": "no-store, max-age=0",
                 },
-                isItDB: true
+                isItDB: true,
             }
         );
     } catch (error) {
@@ -69,9 +67,7 @@ export async function GET(_request) {
 export async function POST(request) {
     try {
         await connectMongo();
-
         const body = await request.json();
-
         // Map CMS admin panel fields -> profile.json / schema fields
         const newEntry = {
             key: body.slug,

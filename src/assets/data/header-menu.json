@@ -1,0 +1,141 @@
+[
+  {
+    "label": "Home",
+    "icon": "pi pi-home",
+    "url": "/"
+  },
+  {
+    "label": "About Us",
+    "icon": "pi pi-users",
+    "items": [
+      { "label": "Who we are", "icon": "pi pi-user", "url": "/#who-we-are" },
+      { "label": "What we do", "icon": "pi pi-briefcase", "url": "/#what-we-do" },
+      { "label": "Mission", "icon": "pi pi-flag", "url": "/#mission" },
+      { "label": "Founders", "icon": "pi pi-users", "url": "/#founders" },
+      { "label": "Team members", "icon": "pi pi-sitemap", "url": "/Team_Members/" },
+      { "label": "Gallery", "icon": "pi pi-images", "url": "/gallery/" },
+      { "label": "Latest news", "icon": "pi pi-clock", "url": "/#news" }
+    ]
+  },
+  {
+    "label": "Projects",
+    "icon": "pi pi-folder-open",
+    "items": [
+      {
+        "label": "Diseases",
+        "icon": "pi pi-bug",
+        "items": [
+          {
+            "label": "Malaria",
+            "icon": "pi pi-file",
+            "items": [
+              { "label": "Village Mapping (2017 - ongoing)", "icon": "pi pi-file-o", "url": "/service/village-mapping/" },
+              { "label": "G6PD Testing for Malaria Treatment (2022 - ongoing)", "icon": "pi pi-file-o", "url": "/service/g6pd-testing-for-malaria-treatment/" },
+              { "label": "Piloting Village-level Malaria Surveillance in Lama, Bandarban. (2022)", "icon": "pi pi-file-o", "url": "/service/piloting-village-level-malaria-surveillance-in-lama-bandarban/" },
+              { "label": "Malaria API Tracker (2021)", "icon": "pi pi-file-o", "url": "/service/malaria-api-tracker/" }
+            ]
+          },
+          {
+            "label": "Covid-19",
+            "items": [
+              { "label": "Crisis Ready Project (CRP) (2022)", "url": "/service/crp-assessing-mobility-data-for-guiding-disaster-response-in-the-greater-mekong-subregion-and-bangladesh-crisis-ready/" },
+              { "label": "Mask Study (2021)", "url": "/service/mask-study/" },
+              { "label": "COVID-19 Risk Zoning (2020)", "url": "/service/covid-19/" },
+              { "label": "Physical Accessibility to COVID-19 Related Health Services Analysis - Bangladesh (2020)", "url": "/service/physical-accessibility-to-covid-19-related-health-services-analysis-moru/" },
+              { "label": "Real-time population mapping to assess the impact of travel restrictions and social distancing on COVID-19 spread (2020)", "url": "/service/real-time-population-mapping-to-assess-the-impact-of-travel-restrictions-and-social-distancing-on-covid-19-spread-2020/" }
+            ]
+          },
+          {
+            "label": "Dengue",
+            "icon": "pi pi-bug",
+            "items": [
+              {
+                "label": "Aedes mosquito survey (2021 - ongoing)",
+                "icon": "pi pi-search",
+                "items": [
+                  { "label": "Pre-monsoon Aedes Mosquito Survey", "icon": "pi pi-calendar", "url": "/service/pre-monsoon-aedes-mosquito-survey-nmeatdcp-dghs/" },
+                  { "label": "Post-monsoon Aedes Mosquito Survey", "icon": "pi pi-calendar-times", "url": "/service/post-monsoon-aedes-mosquito-survey-nmeatdcp-dghs/" }
+                ]
+              },
+              { "label": "Dengue Risk Tracker (2021)", "icon": "pi pi-file-o", "url": "/service/dengue-risk-tracker-the-recent-seven-days-dengue-situation-in-dhaka-city-corporations-nmeatdcp-dghs/" },
+              { "label": "Dengue Household Survey (2019)", "icon": "pi pi-file-o", "url": "/service/dengue-household-survey-nmeatdcp-dghs/" },
+              { "label": "Dengue risk zoning (2019)", "icon": "pi pi-file-o", "url": "/service/dengue-risk-zoning-nmeatdcp-dghs/" },
+              { "label": "Drone driven imageries to identify breeding space in Dhaka (2019)", "icon": "pi pi-file-o", "url": "/service/unmanned-aerial-vehicles-uav-for-aedes-mosquito-breeding-zone-detection-nmeatdcp-dghs/" }
+            ]
+          },
+          {
+            "label": "Rabies",
+            "icon": "pi pi-paw",
+            "items": [
+              {
+                "label": "Mass Dog Vaccination Program (2018 - Ongoing)",
+                "icon": "pi pi-syringe",
+                "items": [
+                  { "label": "Project Summary", "icon": "pi pi-file", "url": "/service/rabies/project-summary/" },
+                  { "label": "Animal Control Staff Training (2018 - ongoing)", "icon": "pi pi-users", "url": "/service/rabies/animal-control-staff-training-2018-ongoing/" },
+                  { "label": "Digital map making and demarcation of union boundary (2020)", "icon": "pi pi-users", "url": "/service/rabies/digital-map-making-and-demarcation-of-union-boundary-2020/" },
+                  { "label": "CDC Atlanta Training (2018)", "icon": "pi pi-users", "url": "/service/rabies/cdc-atlanta-training-2018/" },
+                  { "label": "Four Day Introductory Training on Dog Catching & Vaccination for National Team (2021)", "icon": "pi pi-users", "url": "/service/rabies/four-day-introductory-training-on-dog-catching-vaccination-for-national-team-2021/" }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "Filariasis",
+            "items": [
+              { "label": "Survey for assessing the prevalence of Soil-Transmitted Helminths (STH) among school-aged children of Bangladesh (2018)", "url": "/service/survey-for-assessing-the-prevalence-of-soil-transmitted-helminths-sth-among-school-aged-children-of-bangladesh-2018/" }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Nondiseases",
+        "icon": "pi pi-database",
+        "items": [
+          { "label": "The Global Health Facilities Database (GHFD) (2020 - ongoing)", "icon": "pi pi-building", "url": "/service/the-global-health-facilities-database-ghfd-2020-ongoing/" }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Activities",
+    "icon": "pi pi-calendar",
+    "items": [
+      { "label": "Volunteering", "icon": "pi pi-users", "url": "/activity/volunteering/" },
+      {
+        "label": "GroupLetters",
+        "icon": "pi pi-file",
+        "items": [
+          { "label": "Issue 1", "icon": "pi pi-file-o", "url": "/activity/issue-1/" },
+          { "label": "Issue 2", "icon": "pi pi-file-o", "url": "/activity/issue-2/" },
+          { "label": "Issue 3", "icon": "pi pi-file-o", "url": "/activity/issue-3/" }
+        ]
+      },
+      {
+        "label": "Training",
+        "icon": "pi pi-graduation-cap",
+        "items": [
+          {
+            "label": "Capacity Training",
+            "icon": "pi pi-cog",
+            "items": [
+              { "label": "Introductory Training on Geographical Information System (GIS) (2019)", "icon": "pi pi-map", "url": "/activity/introductory-training-on-geographical-information-system-gis-2019/" },
+              { "label": "Introduction to GIS for Communicable Disease Surveillance (2017)", "icon": "pi pi-map-marker", "url": "/activity/introduction-to-gis-for-communicable-disease-surveillance-2017/" }
+            ]
+          }
+        ]
+      },
+      { "label": "GIS & RS Club Cafe", "icon": "pi pi-coffee", "url": "/activity/gis-rs-club-cafe/" }
+    ]
+  },
+  {
+    "label": "Contact Us",
+    "icon": "pi pi-envelope",
+    "url": "/contact-us/"
+  },
+  {
+    "label": "Donate Us",
+    "icon": "pi pi-heart",
+    "url": "/fundraising/"
+  }
+]

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import connectMongo from "@/lib/mongodb";
+import { connectMongo } from "@/lib/mongodb";
 import News from "../../schema/newsSchema";
 
 // GET ONE

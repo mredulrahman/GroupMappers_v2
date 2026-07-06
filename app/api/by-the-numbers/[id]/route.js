@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bythenumbers from "../../schema/bythenumbersSchema";
-import { connectMongo } from "../../../src/lib/mongodb";
+import { connectMongo } from "@/lib/mongodb";
 
 // GET ONE
 // export async function GET(_request, { params }) {

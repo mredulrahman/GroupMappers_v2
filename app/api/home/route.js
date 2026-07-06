@@ -1,18 +1,20 @@
 import { NextResponse } from "next/server";
-import ContentItem from "../../../src/models/ContentItem";
+import { connectMongo } from "../../../src/lib/mongodb";
+import Sections from "../schema/sectionSchema";
 
-export async function GET(request) {
+export async function GET() {
     try {
-        const { searchParams } = new URL(request.url);
-        const type = searchParams.get("type");
-
-        const query = type ? { type, status: "published" } : { status: "published" };
-        const data = await ContentItem.find(query).sort({ publishedAt: -1 }).lean();
-
-        return NextResponse.json({ success: true, data }, { status: 200 });
+        await connectMongo();
+        const sections = await Sections.find();
+        return NextResponse.json(
+            sections,
+            { status: 200 }
+        );
     } catch (error) {
         return NextResponse.json(
-            { success: false, message: error.message },
+            {
+                message: error.message
+            },
             { status: 500 }
         );
     }
@@ -20,14 +22,75 @@ export async function GET(request) {
 
 export async function POST(request) {
     try {
+        await connectMongo();
         const body = await request.json();
-        const document = await ContentItem.create(body);
-
-        return NextResponse.json({ success: true, data: document }, { status: 201 });
+        const newEntry = {
+            key: body.key,
+            title: body.title,
+            content: body.content,
+            url: body.url,
+        };
+        const section = await Sections.findOneAndUpdate({ key: newEntry.key }, newEntry, {
+            upsert: true,
+            new: true
+        });
+        return NextResponse.json(
+            section,
+            { status: 201 }
+        );
     } catch (error) {
         return NextResponse.json(
-            { success: false, message: error.message },
-            { status: 400 }
+            {
+                message: error.message
+            },
+            { status: 500 }
+        );
+    }
+}
+
+export async function PUT(request) {
+    try {
+        await connectMongo();
+        const body = await request.json();
+        const updated =
+            await Sections.findOneAndUpdate(
+                { key: body.key },
+                body,
+                {
+                    new: true
+                }
+            );
+        return NextResponse.json(
+            updated,
+            { status: 200 }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: error.message
+            },
+            { status: 500 }
+        );
+    }
+}
+
+export async function DELETE(request) {
+    try {
+        await connectMongo();
+        const { _id } = await request.json();
+        await Sections.findByIdAndDelete(_id);
+        return NextResponse.json(
+            {
+                message: "Deleted successfully"
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: error.message
+            },
+            { status: 500 }
         );
     }
 }

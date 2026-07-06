@@ -3,7 +3,7 @@
         "key": "project-summary",
         "title": "Project Summary",
         "para": "The National Rabies Elimination Program in Bangladesh, supported by GroupMappers, focuses on achieving herd immunity and controlling rabies through mass dog vaccination. GroupMappers plays a crucial role in ensuring the vaccination of at least 70% of dogs across the country.\n\nThe program includes training for animal control staff, digital map making, evaluation programs, and training on dog catching and vaccination. It has significantly impacted people’s perception of animal welfare and increased awareness about anti-rabies vaccines and treatment. The program has made substantial progress in eliminating rabies and safeguarding public health in Bangladesh.\n\n__Client:__ National Rabies Elimination Program, CDC, DGHS",
-        "img":[
+        "img": [
             "/assets/images/18.GroupMappers-Showcase.jpg",
             "/assets/images/rabies.jpg"
         ]
@@ -16,7 +16,7 @@
     {
         "key": "digital-map-making-and-demarcation-of-union-boundary-2020",
         "title": "Digital map making and demarcation of union boundary",
-        "para": "A project to create digital maps for a mass dog vaccination program. "
+        "para": "A project to create digital maps for a mass dog vaccination program."
     },
     {
         "key": "cdc-atlanta-training-2018",

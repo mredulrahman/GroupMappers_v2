@@ -52,6 +52,37 @@ export async function PATCH(request, { params }) {
   return NextResponse.json({ item });
 }
 
+export async function GET(request, { params }) {
+  try {
+    const authError = requireAdmin(request);
+    if (authError) return authError;
+
+    const { id } = await params;
+    // const payload = patchSchema.parse(await request.json());
+
+    // if (payload.slug) {
+    //   payload.slug = payload.slug.trim().toLowerCase();
+    // }
+
+    // if (payload.status === "published" && payload.publishedAt === undefined) {
+    //   payload.publishedAt = new Date().toISOString();
+    // }
+
+    await connectMongo();
+
+    const item = await ContentItem.findById({ _id: id }).lean();
+
+    if (!item) {
+      return NextResponse.json({ error: "Content not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ item }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+
 export async function DELETE(request, { params }) {
   const authError = requireAdmin(request);
   if (authError) return authError;

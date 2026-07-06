@@ -20,17 +20,17 @@ function titleFromSlug(slug) {
 }
 
 function normalizeItems() {
-  const profiles = profilesData.map((item) => ({
-    type: "profiles",
-    title: item.name,
-    slug: item.profileUrl || "",
-    status: "published",
-    body: item.bio || "",
-    images: item.image || [],
-    metadata: {
-      legacyKey: item.key || "",
-    },
-  }));
+  // const profiles = profilesData.map((item) => ({
+  //   type: "profiles",
+  //   title: item.name,
+  //   slug: item.profileUrl || "",
+  //   status: "published",
+  //   body: item.bio || "",
+  //   images: item.image || [],
+  //   metadata: {
+  //     legacyKey: item.key || "",
+  //   },
+  // }));
 
   const statItems = statItemsData.statItems.map((item) => ({
     type: "bytheNumbers",
@@ -107,12 +107,12 @@ function normalizeItems() {
     },
   }));
 
-  return [...news, ...activities, ...teamMembers, ...rabiesPages, ...profiles, ...galleryItems, ...statItems];
+  return [...news, ...activities, ...teamMembers, ...rabiesPages, ...galleryItems, ...statItems];
 }
 
 export async function POST(request) {
-  const authError = requireAdmin(request);
-  if (authError) return authError;
+  // const authError = requireAdmin(request);
+  // if (authError) return authError;
 
   await connectMongo();
 

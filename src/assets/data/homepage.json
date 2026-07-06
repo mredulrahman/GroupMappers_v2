@@ -1,0 +1,273 @@
+{
+    "sections": [
+        {
+            "key": "hero",
+            "slider": [
+                {
+                    "src": "/assets/images/69455870_2412430902361748_8118738411470192640_o.jpg",
+                    "thumb": "thumb-1",
+                    "alt1": "Slide 1"
+                },
+                {
+                    "src": "/assets/images/DSC0048-scaled.jpg",
+                    "thumb": "thumb-2",
+                    "alt1": "Slide 2"
+                },
+                {
+                    "src": "/assets/images/DSC_0241-scaled.jpg",
+                    "thumb": "thumb-3",
+                    "alt1": "Slide 3"
+                },
+                {
+                    "src": "/assets/images/2C564851-1CA9-42EA-B5B3-3B75C575F9C1.jpg",
+                    "thumb": "thumb-4",
+                    "alt1": "Slide 4"
+                },
+                {
+                    "src": "/assets/images/329799865_446331290962677_9061255370092079196_n.jpg",
+                    "thumb": "thumb-5",
+                    "alt1": "Slide 5"
+                },
+                {
+                    "src": "/assets/images/9D43283D-11A2-4796-8803-1EB9C7B12E83.jpg",
+                    "thumb": "thumb-6",
+                    "alt1": "Slide 6"
+                },
+                {
+                    "src": "/assets/images/IMG_20230615_105624-scaled.jpg",
+                    "thumb": "thumb-7",
+                    "alt1": "Slide 7"
+                },
+                {
+                    "src": "/assets/images/IMG_5440-scaled.jpg",
+                    "thumb": "thumb-8",
+                    "alt1": "Slide 8"
+                },
+                {
+                    "src": "/assets/images/gis-and-rs-club-cafe.jpgtrtj-scaled.jpg",
+                    "thumb": "thumb-9",
+                    "alt1": "Slide 9"
+                }
+            ]
+        },
+        {
+            "key": "who-we-are",
+            "title": "Who we are",
+            "content": "As our name suggests, we are a group of Bangladesh-based mapmakers GroupMappers is a Bangladeshi crowdsourcing initiative that utilizes geospatial technology for public health issues. Established in 2017, it is led by the Mahidol Oxford Tropical Medicine Research Unit and the Communicable Disease Control division of the DGHS in Bangladesh.The organization’s 20 core members possess a strong GIS aptitude and diverse backgrounds in education and professional experience. Starting with village mapping, our success in the field has continued to grow.",
+            "slider": [
+                {
+                    "src": "/assets/images/331983336_1200178177277688_3773989570788146855_n.webp",
+                    "alt": "Misty Mountain Majesty"
+                },
+                {
+                    "src": "/assets/images/329856116_2015029008690502_4708346483387385590_n-1.webp",
+                    "alt": "Winter Wonderland"
+                },
+                {
+                    "src": "/assets/images/9D43283D-11A2-4796-8803-1EB9C7B12E83.jpg",
+                    "alt": "Autumn Mountain Retreat"
+                },
+                {
+                    "src": "/assets/images/323640300_873953090592227_1708312130902432154_n.webp",
+                    "alt": "Tranquil Lake Reflection"
+                },
+                {
+                    "src": "/assets/images/332125939_946766212981655_4392939912334334589_n.webp",
+                    "alt": "Misty Mountain Peaks"
+                },
+                {
+                    "src": "/assets/images/IMG_5440-scaled.jpg",
+                    "alt": "Golden Hour Glow"
+                },
+                {
+                    "src": "/assets/images/volunteer-scaled.webp",
+                    "alt": "Snowy Mountain Highway"
+                }
+            ]
+        },
+        {
+            "key": "mission",
+            "title": "Mission",
+            "content": "“Empowering communities through the utilization of crowdsourced mapping and data analysis for enhanced public health outcomes.”",
+            "url": "https://www.youtube.com/embed/h39Xfd5wJLw"
+        },
+        {
+            "key": "what-we-do",
+            "title": "What we do",
+            "content": "By utilizing a geospatial approach, we aim to address public health issues through the development of innovative solutions. This approach involves using geographical data and technologies, such as mapping and spatial analysis, to gain a better understanding of the distribution and spread of diseases, identify high-risk areas, and evaluate the effectiveness of different interventions. By using this approach, we can improve the targeting and delivery of public health interventions and ultimately improve the health outcomes of affected communities.",
+            "accordianContent": [
+                {
+                    "key": 1,
+                    "title": "Data collection & management",
+                    "contents": "The GroupMappers team has extensive expertise in both collection and management of geospatial data. They utilize a variety of methods to gather information, including key informant interviews, participatory rural appraisals, and surveys using tools such as ODK, Kobo Toolbox, and SMS. They also provide technical support to different communicable disease control programs, including rabies, malaria, aedes-transmitted infections, and soil transmitted helminths. GroupMapper’s database design and development skills encompass data cleaning, quality control, and data transformation, and they use cutting-edge tools to create customizable geo-referencing systems."
+                },
+                {
+                    "key": 2,
+                    "title": "Data analysis & modeling",
+                    "contents": "Spatial analysis and modeling are integral to GroupMapper’s work, particularly physical accessibility analysis. Their experience includes utilizing geospatial data to perform spatial interpolation, overlay analysis, and spatial statistics, among other techniques. These capabilities enable them to support public health initiatives by providing data-driven insights and recommendations"
+                },
+                {
+                    "key": 3,
+                    "title": "Mapping and visualization",
+                    "contents": "GroupMappers excel in developing interactive web maps and visualizations that convey geospatial information to end-users. Expertise includes building web mapping applications, creating customized map styles, and integrating data from multiple sources to effectively present spatial data. They have applied these skills to a range of public health initiatives, enhancing comprehension and decision-making in the field. Furthermore, they possess extensive knowledge of producing tailored thematic maps for external organizations"
+                },
+                {
+                    "key": 4,
+                    "title": "Data dissemination and sharing",
+                    "contents": "GroupMappers provides support for making geospatial data accessible to stakeholders and end-users. This support includes data publishing, sharing, and implementation of data access policies. Through these efforts, GroupMappers aims to facilitate the effective use of geospatial data in public health and related domains."
+                }
+            ]
+        },
+        {
+            "key": "volunteerism-and-support",
+            "title": "Volunteerism and Support",
+            "content": "As a crowdsourcing initiative, GroupMappers values the power of volunteerism and engages young individuals who share a passion for exploring the world of geospatial techniques and public health. This provides an opportunity for individuals to participate in action-oriented and impactful activities. Volunteers can choose to participate in segments that align with their interests, such as working for fund raising , mapping, writing for newsletters or conducting sessions in GIS/RS club cafes."
+        },
+        {
+            "key": "founders",
+            "title": "Founders",
+            "content": "",
+            "cardContent": [
+                {
+                    "image": "assets/images/richard.webp",
+                    "name": "Richard Maude",
+                    "designation": "Head of Epidemiology",
+                    "details": "Professor Maude is Head of the Epidemiology Department at Mahidol-Oxford Tropical Medicine Research Unit, Bangkok, Thailand His research combines clinical studies, descriptive epidemiology and mathematical modelling of human diseases.",
+                    "link-1": "https://www.tropmedres.ac/team/richard-maude",
+                    "link-2": "https://x.com/rjmaude",
+                    "link-3": "https://www.linkedin.com/in/richardjmaude/"
+                },
+                {
+                    "image": "/assets/images/sinha.webp",
+                    "name": "Ipsita Sinha",
+                    "designation": "Research Physician",
+                    "details": "Dr Ipsita Sinha is part of the Epidemiology department at MORU, and a Research Physician in Tropical Medicine at the University of Oxford. She is also an honorary medical registrar at the John Radcliffe Hospital in Oxford.",
+                    "link-1": "https://www.tropmedres.ac/team/ipsita-sinha"
+                },
+                {
+                    "image": "/assets/images/Sazid-Ibna-Zaman-scaled.webp",
+                    "name": "Sazid Ibna Zaman",
+                    "designation": "Data Manager & GIS Specialist",
+                    "details": "Based in Dhaka, Bangladesh, Sazid Ibna Zaman is a Data Manager & GIS Specialist for the MORU Epidemiology departments at the Mahidol Oxford Tropical Medicine Research Unit (MORU), Bangkok, Thailand",
+                    "link-1": "https://www.tropmedres.ac/team/sazid-ibna-zaman",
+                    "link-2": "https://x.com/sajidgeo1707",
+                    "link-3": "https://www.linkedin.com/in/sazid-ibna-zaman-8072144/"
+                }
+            ]
+        },
+        {
+            "key": "latest-news",
+            "title": "Latest News",
+            "cardContent": [
+                {
+                    "id": 1,
+                    "title": "GroupMappers, MORU, is featured in celebration of World Malaria Day 2023 by WHO news.",
+                    "date": "July 25, 2023",
+                    "image": "/assets/images/363292119_622358269996766_5741166488675444152_n.webp",
+                    "slug": "/news/groupmappers-moru-is-featured-in-celebration-of-world-malaria-day-2023-by-who-news/"
+                },
+                {
+                    "id": 2,
+                    "title": "The two week long Diagnostic Network Optimization (DNO) training workshop, funded by FIND",
+                    "date": "July 25, 2023",
+                    "image": "/assets/images/363295717_621875540045039_953665437720276652_n.webp",
+                    "slug": "/news/the-two-week-long-diagnostic-network-optimization-dno-training-workshop-funded-by-find/"
+                },
+                {
+                    "id": 3,
+                    "title": "Update on Monsoon Aedes Mosquito Survey",
+                    "date": "July 19, 2023",
+                    "image": "/assets/images/355011755_603194128579847_6181054942140954672_n.webp",
+                    "slug": "/news/update-on-monsoon-aedes-mosquito-survey/"
+                },
+                {
+                    "id": 4,
+                    "title": "NMEP, BRAC, and GroupMappers unite to celebrate The World Malaria Day, 2023",
+                    "date": "June 15, 2023",
+                    "image": "/assets/images/347551904_601425012090092_920833754943124441_n.webp",
+                    "slug": "/news/nmep-brac-and-groupmappers-unite-to-celebrate-the-world-malaria-day-2023/"
+                },
+                {
+                    "id": 5,
+                    "title": "Workshop on Development of Malaria funding request to Global Fund (GC-7)",
+                    "date": "February 26, 2023",
+                    "image": "/assets/images/E88DC258-35FA-4175-B8E2-42A08B82ABD0.webp",
+                    "slug": "/news/workshop-on-development-of-malaria-funding-request-to-global-fund-gc-7/"
+                },
+                {
+                    "id": 6,
+                    "title": "Updates on Crisis Ready Project (CRP) workshop!",
+                    "date": "February 10, 2023",
+                    "image": "/assets/images/329799865_446331290962677_9061255370092079196_n.jpg",
+                    "slug": "/news/technical-assistance-in-implementing-village-level-data-collection-and-surveillance-towards-malaria-elimination-in-lama-upazila-bandarban/"
+                },
+                {
+                    "id": 7,
+                    "title": "Implementing village level data collection and surveillance towards malaria elimination",
+                    "date": "January 11, 2023",
+                    "image": "/assets/images/323640300_873953090592227_1708312130902432154_n (1).webp",
+                    "slug": "/news/technical-assistance-in-implementing-village-level-data-collection-and-surveillance-towards-malaria-elimination-in-lama-upazila-bandarban/"
+                },
+                {
+                    "id": 8,
+                    "title": "Assisting in introduction of G6PD testing to improve malaria treatment in Bangladesh.",
+                    "date": "December 15, 2022",
+                    "image": "/assets/images/320811567_523192509756883_5078948741165636619_n.webp",
+                    "slug": "/news/a-two-day-workshop-with-find-iccdr-b-and-nmep-on-applying-diagnostic-network-optimisation-analysis-to-inform-the-introduction-of-g6pd-testing-into-bangladesh-for-improved-malaria-treatment-was/"
+                },
+                {
+                    "id": 9,
+                    "title": "Mass Dog Vaccination Program (MDV)",
+                    "date": "December 5, 2022",
+                    "image": "/assets/images/317859655_3366860196918809_9046594087199264735_n.webp",
+                    "slug": "/news/mass-dog-vaccination-program-mdv-from-30th-november-to-5th-december-2022/"
+                },
+                {
+                    "id": 10,
+                    "title": "Celebrating GIS Day, 2022 with JnU",
+                    "date": "November 20, 2022",
+                    "image": "/assets/images/316113518_3357919677812861_7216339683318669044_n.webp",
+                    "slug": "/news/our-training-in-lama-upazila-is-continuing-this-week-under-technical-assistance-in-implementing-village-level-data-collection-and-surveillance-towards-malaria-elimination-at-lama-bandarban/"
+                }
+            ]
+        },
+        {
+            "key": "join-our-effort",
+            "title": "Join our effort",
+            "content": "You can support us in our mission to improve public health in Bangladesh, particularly in remote areas like Bandarban, by making a donation, sharing your technical knowledge or collaborating with the organization. Donations can help fund GroupMapper’s efforts to collect and analyze geospatial data and support the implementation of public health interventions. Your technical knowledge, especially in the field of geospatial technologies, can also help the organization to improve its data collection and analysis capabilities. Collaborating with GroupMappers can provide opportunities to work on real-world public health challenges in Bangladesh and also help to build relationships and networks in the field. By working together, we can make a real difference in improving public health outcomes in Bangladesh.",
+            "image": "/assets/images/Caddddpture.webp",
+            "text": "Help us make an impact",
+            "btnLink": "https://www.campaign.ox.ac.uk/groupmappers"
+        },
+        {
+            "key": "by-the-number",
+            "title": "By the number",
+            "items": [
+                {
+                    "key": "coreExperts",
+                    "icon": "<i class='fa fa-briefcase fa-2x' aria-hidden='true' style={{ color: '#121E62' }}></i>",
+                    "value": "20",
+                    "label": "Core Experts"
+                },
+                {
+                    "key": "regularEmployees",
+                    "icon": "<i class='fas fa-user-tie fa-2x' aria-hidden='true' style={{ color: '#121E62' }}></i>",
+                    "value": "19",
+                    "label": "Regular Employees"
+                },
+                {
+                    "key": "activeVolunteers",
+                    "icon": "<i class='fa fa-users fa-2x' aria-hidden='true' style={{ color: '#121E62' }}></i>",
+                    "value": "50+",
+                    "label": "Active Volunteers"
+                },
+                {
+                    "key": "ongoingProjects",
+                    "icon": "<i class='fa fa-pie-chart fa-2x' aria-hidden='true' style={{ color: '#121E62' }}></i>",
+                    "value": "6",
+                    "label": "Ongoing Projects"
+                }
+            ]
+        }
+    ]
+}

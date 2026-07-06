@@ -7,7 +7,7 @@ export async function GET(_request) {
     try {
         await connectMongo();
 
-        const data = await bythenumbers.find();
+        const data = await bythenumbers.find({}).lean();
 
         return NextResponse.json({ success: true, items: data }, { status: 200 });
     } catch (error) {
