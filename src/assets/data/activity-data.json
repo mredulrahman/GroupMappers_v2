@@ -1,0 +1,50 @@
+[
+  {
+    "key": "volunteering",
+    "title": "Volunteering",
+    "para": "GroupMappers values volunteers for their expertise, unique perspectives, and contributions to its success. Volunteering benefits include learning, networking, and career advancement. Fresh perspectives and abilities can aid in improving workflows and project turnaround times.",
+    "images": [
+      "/assets/images/image_2023_02_23T09_39_11_601Z.png",
+      "/assets/images/86295115_2568873256717511_1866947121643520000_n-1536x1152.jpg",
+      "/assets/images/IMG_20180705_182847-1536x1152.jpg",
+      "/assets/images/gandr-collage-1536x864.jpg",
+      "/assets/images/volunteer-1536x679.jpg"
+    ]
+  },
+  {
+    "key": "issue-1",
+    "para": "In issue 1, we explored the role of location in healthcare and how geospatial sciences can facilitate access to quality healthcare.\n\nAs we prepare our upcoming issue, we are looking forward to continue sharing insights and perspectives on the most recent advancements and innovations in spatial science. You may also contribute your writings. Stay tuned for additional thought-provoking articles and project updates."
+  },
+  {
+    "key": "issue-2",
+    "para": "Issue 2, focused on the relation between GIS and language."
+  },
+  {
+    "key": "issue-3",
+    "para": "In our forthcoming volume, we are looking forward to addressing the most recent innovations in spatial science. We will explore how geospatial technologies are influencing the future and their potential to effect positive change. With a focus on how geospatial technologies will shape the future, we invite you to share your own thoughts and writings in this issue."
+  },
+  {
+    "key": "introductory-training-on-geographical-information-system-gis-2019",
+    "title": "Introductory Training on Geographical Information System (GIS) (2019)",
+    "para": "The objective of the training session was to provide participants with an introduction to Geographic Information Systems (GIS) and how it can be used in various fields.\n\nTopics Covered:\n\n · Introduction to GIS and its applications\n\n· Basic GIS terminology and concepts \n\n· Types of GIS data · GIS data sources and acquisition · GIS data formats · Introduction to GIS software · Basic GIS functions and tools · GIS data analysis and visualization Target Audience: The target audience for the training session were volunteers who are new to GIS or have a basic understanding of GIS. Trainers: The training session was conducted by Md. Nurullah, Sazid Ibna Zaman who have expertise in GIS and have previously conducted similar training sessions. Participants:Volunteers from Geography and Environment Department from Dhaka university and Jagannath University attended the training session. Outcome: The training session was successful in providing participants with a comprehensive introduction to GIS and its applications. Participants gained knowledge and skills on basic GIS concepts, data formats, and software applications. They also learned how to perform basic GIS functions and data analysis. Overall, the training session met its objectives and was well-received by the participants."
+  },
+  {
+    "key": "introduction-to-gis-for-communicable-disease-surveillance-2017",
+    "title": "Introduction to GIS for Communicable Disease Surveillance",
+    "para": "An introductory meeting held between the GroupMappers and the authorities of Rabies Control Program. GroupMappers briefed the authorities about the applications of GIS for the mass dog vaccination program. The outcomes were ACS and MDV.",
+    "images": [
+      "/assets/images/IMG_5609-scaled.jpg",
+      "/assets/images/IMG_5647-scaled.jpg",
+      "/assets/images/IMG_5581-scaled.jpg",
+      "/assets/images/IMG_5673-scaled.jpg"
+    ]
+  },
+  {
+    "key": "gis-rs-club-cafe",
+    "title": "GIS/RS Club",
+    "para": "GIS/RS club cafe is a forum that facilitates discussion on spatial techniques and research trends among professionals, volunteers, and groupmappers. The platform aims to connect young and enthusiastic minds with professional experts in the field.",
+    "images": [
+      "/assets/images/gis-and-rs-club-cafe.jpgtrtj-scaled.jpg"
+    ]
+  }
+]

@@ -1,0 +1,110 @@
+[
+    {
+        "key": "nurullah",
+        "name": "Md Nurullah",
+        "designation": "GIS Data manager",
+        "img": "/assets/images/PXL_20230422_0302hh04833-removebg-preview.png",
+        "description": "A geographer with data management and GIS analytical capability. His main skill sets are in archiving data, documentation, creating metadata, organizing and storing databases, ensuring data security, privacy, and overall management for projects. He has supported different disease programmes in Bangladesh including rabies, malaria, dengue, and helminthiasis since 2017. He has recently been involved with the Geolocated Health Facility Database (GHFD) Initiative, rabies Mass Dog Vaccination (MDV) Program, Dengue and Chikungunyia Vector Surveys, COVID-19 Risk Zoning and Mobility Data Analysis for Bangladesh. He has expertise in mobile based data collection using KoBoCollect, ODK, Survey123, WVS and geospatial tools such as QGIS and ArcGIS (desktop and online) for data collection, management and analysis.",
+        "mail": "opunurullah@gmail.com"
+    },
+    {
+        "key": "afrida",
+        "name": "Afrida Asad",
+        "designation": "Research and Development Officer",
+        "img": "/assets/images/yfufu-350x250.jpg",
+        "description": "A geographer from Bangladesh, who is currently pursuing a Masters in Global Health Science and Epidemiology at the University of Oxford. Her skills cover Geospatial analysis (ArcGIS), statistical analysis (STATA, R) and systematic reviews and meta-analysis in epidemiology. She has been involved with GroupMappers since 2018 with contributions in projects such as Crisis Ready, Facebook mobility data for COVID-19 situation, accessibility analysis of health facilities and village mapping.",
+        "mail": "afrida.abonty@gmail.com"
+    },
+    {
+        "key": "ismail",
+        "name": "Md Ismail Hossain",
+        "designation": "Spatial Data Scientist",
+        "img": "/assets/images/vyyty.jpg",
+        "description": "With expertise in GIS, remote sensing, machine learning in spatial analysis and data visualization, a strong grasp of R and Python programming, he has contributed his cutting edge skills in projects like Crisis Ready, Malaria API Tracker, Village Mapping Tracker, healthcare accessibility analysis and Facebook mobility data for COVID-19.",
+        "mail": "ismailahmed.du@gmail.com"
+    },
+    {
+        "key": "didar",
+        "name": "Didar Uddin",
+        "designation": "Research Assistant",
+        "img": "/assets/images/hgytty.jpg",
+        "description": "Working at the field level, he has contributed to data collection, monitoring, and validationg for a range of MORU projects in Bangladesh, including  village mapping with GroupMappers, quantifying the impact of human mobility on P. falciperam burden in the Greater Mekong Subregion, the South and Southeast Asian Community-based Trial Network (SEACTN). His local knowledge, strong negotiation skills and collaborations with local authorities help projects to be implemented efficiently.",
+        "mail": " didar.bd1985@gmail.com"
+    },
+    {
+        "key": "antor",
+        "name": "Ahamed Sakib Antor",
+        "designation": "GIS Analyst",
+        "description": "He is a multi-talented individual who excels in various aspects of data collection and datatbase organization. He is experienced in handling spatial and non-spatial data. Currently, he is involved in collborations with the National Malaria Elimination Program (NMEP), FIND, and ICCDR,B for Diagnostic Network Optimisation. He also has skills in volunteer engagement and managing accounts for GroupMappers .",
+        "mail": "sakibantor7@gmail.com"
+    },
+    {
+        "key": "mustakim",
+        "name": "Md. Mustakim Hossain Khan",
+        "designation": "GIS Specialist",
+        "img": "/assets/images/vjfuyf.png",
+        "description": "Being involved with GroupMappers since 2018, he is a valuable resource with skills in data management, analysis and dashboard preparation for project management. He has been involved with applying Diagnostic Network Optimisation analysis to inform the introduction of G6PD testing into Bangladesh for the NMEP, and in implementing village-level data collection and surveillance in real time. He has expertise in mobile based data collection using KoBoCollect, ODK, Survey123, WVS and geospatial tools including QGIS, ArcGIS (desktop and online), Python and R programming language.",
+        "mail": "mustakimhossainkhan@gmail.com"
+    },
+    {
+        "key": "joly",
+        "name": "Mst. Asfat Ara Joly",
+        "designation": "Data Analyst",
+        "img": "/assets/images/dfhbdr.png",
+        "description": "With a background in Geography and Environment, she has been with GroupMappers as a volunteer since 2020 working on data analysis. She has been involved in the COVID-19 Risk Zoning and Mobility Data Analysis funded by UNDP. Currently she is working as a consultant in the Crisis Ready Project where her responsibilities include itemizing and analyzing mobility data from Facebook, Google and Apple, assessing representativeness of these data and assisting in preparation of reports.",
+        "mail": "asfatarajoly@gmail.com"
+    },
+    {
+        "key": "israt",
+        "name": "Israt Jahan Ria",
+        "designation": "Data Analyst",
+        "description": "With a background in Geography and Environment, she has been with GroupMappers as a volunteer since 2020. Currently, she works in the research and documentation team. She has been involved in the Geolocated Health Facility Database Initiative as a research assistant. Currently she is working as a consultant in the Crisis Ready Project where her responsibilities include itemizing and analyzing mobility data from Facebook, Google and Apple, assessing representativeness of these data and assisting in preparation of reports.",
+        "mail": "19isratjahan9718@gmail.com"
+    },
+    {
+        "key": "naila",
+        "name": "Kazi Nuzhat Naila",
+        "designation": "Project-Coordinator",
+        "description": "With competitive educational credentials from a geography background, Nayla is highly motivated in her research experience in supporting multidisciplinary projects. Her main responsibilities involve project coordinating with background literature review, and report writing.",
+        "mail": "nujhatnayla96@gmail.com"
+    },
+    {
+        "key": "sabiha",
+        "name": "Sabiha Sabrina Left",
+        "designation": "Research Assistant",
+        "description": "With GIS expertise and an apprenticeship in R programming, Sabiha provides vital support to the research team by preparing data-driven tables and graphs for analysis. She has contributed to the Crisis Ready Project.",
+        "mail": "sabihasabrina.du@gmail.com"
+    },
+    {
+        "key": "farah",
+        "name": "Farah Yeasmin",
+        "designation": "Knowledge Management Officer",
+        "img": "/assets/images/gftrtr.jpg",
+        "description": "With a background in Environmental Science and GIS, Farah possesses a unique talent for creating visually appealing and easily understandable presentations for complex projects. Farah joined GroupMappers in 2022, and her skills and experience are expected to contribute greatly to the organization.",
+        "mail": "farahy8@gmail.com"
+    },
+    {
+        "key": "elmee",
+        "name": "Elmee Tabassum",
+        "designation": "Communication Officer",
+        "description": "Elmee Tabassum, a final year bachelors’ student, recently joined GroupMappers to assist in promoting the organization through her content writing and data visualization skills. As a regular contributor, she aims to spread awareness about GroupMappers in social media and enhance its marketing efforts.",
+        "mail": "elmeetabassum22@gmail.com"
+    },
+    {
+        "key": "mahmudul",
+        "name": "Md Mahmudul Hasan",
+        "designation": "Project Manager",
+        "img": "/assets/images/htrh.jpg",
+        "description": "Results-driven IT Project Manager with over six years of experience leading software and GIS-based projects for public health and development initiatives. Skilled in planning, executing, and delivering web-based platforms, dashboards, and digital systems. Adept at leading cross-functional teams, coordinating with stakeholders, and ensuring high-quality project outcomes. Experienced in training staff, optimizing workflows, and leveraging data-driven insights to enhance program effectiveness. Key projects include Dengue Risk Tracker, Malaria API Tracker, and Village Mapping & Survey System.",
+        "mail": "engr.hasanmte@gmail.com",
+        "socialLink": "https://www.linkedin.com/in/loyalhasan/"
+    },
+    {
+        "key": "azizur",
+        "name": "Azizur Rahman",
+        "designation": "Data analyst",
+        "img": "/assets/images/dfgregregrege.jpg",
+        "description": "A data analyst who specializes in preprocessing raw data for a2i, he is skilled in plotting GPS coordinates to track the geographic location of patients. He has been part of the team at GroupMappers since 2018.",
+        "mail": "azizurrahman.s97112@gmail.com"
+    }
+]

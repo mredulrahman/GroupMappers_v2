@@ -1,0 +1,579 @@
+{
+  "diseases": [
+    {
+      "key": "malaria",
+      "title": "Malaria",
+      "projects": [
+        {
+          "key": "village-mapping",
+          "title": "Village Mapping, a key initiative of GroupMappers",
+          "label": "Village Mapping (2017 - ongoing)",
+          "url": "/service/village-mapping/",
+          "year": "2017 - ongoing",
+          "status": "ongoing",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "GroupMappers’ key project, called “Village Mapping,” aims to map Bangladesh’s remote villages in a cost-effective and precise manner. The purpose of this initiative is to identify under-served communities and work toward improving healthcare and other basic needs delivered to those areas. High-quality, in-depth maps of rural areas are created by using satellite imagery annotated by GroupMappers volunteers.\n\n(2018-2019)\n\nMORU/Wellcome Trust. Public Engagement Bursary.GroupMappers\n\n-Identified and mapped settlements in Lama, Bandarban.\n\n-Identified settlement in CHT and Cox’s Bazar\n\n(2021-2022)\n\nMORU/Wellcome Trust. iTPA Innovations Award. Introducing\n\nMalaria API Tracker and an interactive platform for visualizing and updating village maps.\n\n-Developed a geospatial dashboard to track existing malaria data.\n\n(2022-2023) APMEN, Implementing village-level data collection and surveillance towards elimination\n\n-Utilized Lama village data to train health workers with funding from APMEN."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/validation-1-scaled.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/validation-3-scaled.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/handover-3-scaled.jpeg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/handover-2.jpeg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/gg.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/dvd.png",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "g6pd-testing-for-malaria-treatment",
+          "title": "G6PD Testing for Malaria Treatment",
+          "label": "G6PD Testing for Malaria Treatment (2022 - ongoing)",
+          "url": "/service/g6pd-testing-for-malaria-treatment/",
+          "year": "2022 - ongoing",
+          "status": "ongoing",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "Diagnostic Network Optimization Analysis: A project in collaboration with ICCDR,B to analyze diagnostic network for G6PD testing for malaria treatment in Southeastern part of Bangladesh.\n\nFIND, ICDDR,B, and our team collaborated on an initiative to evaluate the G6PD testing network for malaria treatment in the southeastern region of Bangladesh using accessmod.\n\nOur aim was to develop a plan to introduce G6PD testing, increasing access for patients with P. vivax malaria while making efficient use of available resources.\n\nTwo types of data were used for the project-geospatial and tabular. In geospatial data the coordinate of labs and source sites are needed. Then the test demands source wise and a HF master list with details is prepared in an excel template provided by OptiDx.\n\nThrough simulations, we determined the optimal strategy for extensive G6PD testing. This is critical because certain antimalarial drugs can cause severe hemolysis in G6PD-deficient individuals, and P. vivax malaria is common in areas where G6PD deficiency is prevalent.\n\nPhoto taken during the workshop conducted by FIND and ICCDR, B. The World Health Organization (WHO) recommends G6PD testing as a measure to enhance the treatment of malaria"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/15616.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/320692749_1154324201870460_2338870672562996617_n.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "piloting-village-level-malaria-surveillance-in-lama-bandarban",
+          "title": "Piloting Village-level Malaria Surveillance in Lama, Bandarban.",
+          "label": "Piloting Village-level Malaria Surveillance in Lama, Bandarban. (2022)",
+          "url": "/service/piloting-village-level-malaria-surveillance-in-lama-bandarban/",
+          "year": "2022",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "National Malaria Elimination and Aedes Transmitted Diseases Control Program\n\n– Technical Assistance in Implementing Village level Data Collection and Surveillance\n\n– Malaria API Tracker\n\nTechnical Assistance in Implementing Village-level Data Collection and Surveillance:\n\nWe are now collecting malaria data at the village level to contribute to the National Malaria Elimination Programme. The mapping of communities is critical to this program’s strong disease surveillance and intervention, with which we are closely collaborating. Recently, we organized field activities to instruct health care professionals on how to transmit data via USSD and SMS. Data in real-time is crucial for combating malaria. Previously, monitoring and planning were hindered by the program’s reliance on monthly accumulated data."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/image_2023_04_12T08_05_07_050Z.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/323640300_873953090592227_1708312130902432154_n.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/ytjkyjy.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/324188414_627857699030322_6095590925278715175_n.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/321999833_501425571869219_7835864888382398404_n.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/322706463_556160576419262_7955593875119349774_n.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/321748428_493428356251826_3099091657453625530_n-1536x1152.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "malaria-api-tracker",
+          "title": "Malaria API Tracker",
+          "label": "Malaria API Tracker (2021)",
+          "url": "/service/malaria-api-tracker/",
+          "year": "2021",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "An application programming interface (API) for tracking malaria cases of Bangladesh\n\nMalaria API Tracker Offers a complete solution for tracking and analyzing various aspects of malaria through a single platform. The dashboard system is designed by the GroupMappers team, where village maps can be continuously updated and the inputs come from the community within. The dashboard system shows maps, and map associated information and API data targeted for NMEADTP. The goal is to Develop existing malaria data visualization (geospatial and non-geospatial) platforms at the upazila level. The interactive dashboard with updated village mapping can ensure a better monitoring system for the central governing body and it can strengthen local government. The system will facilitate better planning and policy-making at the national and local levels in disease surveillance and in other sectors.\n\nMalaria API Tracker link: https://malariaapitracker.com/"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/image_2023_04_12T08_02_49_762Z-1536x753.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/gegge.jpg",
+              "alt": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "covid-19",
+      "title": "Covid-19",
+      "projects": [
+        {
+          "key": "crp-assessing-mobility-data-for-guiding-disaster-response-in-the-greater-mekong-subregion-and-bangladesh-crisis-ready",
+          "title": "Crisis Ready Project (CRP)",
+          "label": "Crisis Ready Project (CRP) (2022)",
+          "url": "/service/crp-assessing-mobility-data-for-guiding-disaster-response-in-the-greater-mekong-subregion-and-bangladesh-crisis-ready/",
+          "year": "2022",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "Mobility data has become crucial for tracking disease transmission in today’s fast-moving world. The aim of the Crisis Ready Project (CRP) was to assess the use of mobility data in disaster response in 6 countries in Southeast Asia. The project utilized three types of mobility datasets – Apple Mobility Trends, Google Community Mobility Reports, and Facebook Data for Good – and had several objectives, including comparing available datasets, determining coverage and representative levels, developing methods for low-coverage areas, and itemizing datasets for communication with governments.\n\nThe analysis of the mobility datasets revealed that population mobility data can provide valuable insights for decision-making in various fields, including public health, urban planning, transportation, and disaster response.\n\nA workshop titled “Use of Mobility Data for Guiding Public Health Responses” was conducted in Thailand in February 2023 to guide public health responses using mobility data.\n\nOverall, the Crisis Ready Project demonstrated the potential for mobility data to enhance disaster response efforts and inform policy decisions in Southeast Asia"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/mobility-data-scaled.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "mask-study",
+          "title": "Mask Study",
+          "label": "Mask Study (2021)",
+          "url": "/service/mask-study/",
+          "year": "2021",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "A study focused on mapping mask usage during the Covid-19 pandemic. Volunteers used a counter application to collect data on the number of masks worn in different locations. They also identified differences in mask-wearing between indoor and outdoor locations and compared trends in mask-wearing behavior over time."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/3.-DISTRICTS-WITH-HIGHER-UPAZILA-COVERAGE-Mymensingh-and-Rajbari.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/mask-status-by-location.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "covid-19",
+          "title": "Covid-19 Risk Zoning",
+          "label": "COVID-19 Risk Zoning (2020)",
+          "url": "/service/covid-19/",
+          "year": "2020",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "A collaborative effort between A2i and GroupMappers to develop a comprehensive geospatial dashboard for mapping Covid-19 cases and mobility patterns in Bangladesh, aimed at monitoring Covid-19 in Bangladesh.\n\nThe a2i initiative in Bangladesh, funded by UNDP, aimed to identify high-priority Covid-19 risk zones by analyzing data and mapping them. The project divided the process into four stages: patient address to coordinates, coordinates to map file, demarcating risk zones, and updating zoning-related maps and dashboards. The project utilized Excel and Google Earth Pro to geocode patient addresses, and ArcMap to plot the points and aggregate the data. A set of indicators were used to designate red, orange, and green zones based on laboratory-confirmed cases per 100,000 people.\n\nThe project produced 64 district maps and 12 city corporation maps indicating risk zoning status and used two ArcGIS dashboards to present the information through intuitive and interactive data visualizations. The dashboards displayed information such as the population, area, case, case per lac, and risk zone status of a particular ward, city corporation, or zone.\n\nReal-time population mapping to assess the impact of travel restrictions and social distancing on COVID-19 spread\n\nThe study conducted in Bangladesh during the COVID-19 pandemic used real-time mobility data from Facebook to analyze the impact of travel restrictions and social distancing on the spread of the virus. The study aimed to assess the effectiveness of spatially and temporally variable enforcement of social distancing on COVID-19 spread. The findings showed that the population of Bangladesh fluctuated during major events throughout the year, and the COVID-19 case count rose and fell in correspondence with these events. This indicates that travel restrictions and social distancing measures had an impact on the spread of COVID-19. The study suggests that real-time population mapping using Facebook data can be a useful tool for analyzing the effectiveness of pandemic mitigation responses.\n\nPopulation and Travel Pattern During COVID in Bangladesh"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/risk-zone.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/wfdhg.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/real-time.png",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "physical-accessibility-to-covid-19-related-health-services-analysis-moru",
+          "title": "Physical Accessibility to COVID-19 Related Health Services Analysis – MORU",
+          "label": "Physical Accessibility to COVID-19 Related Health Services Analysis - Bangladesh (2020)",
+          "url": "/service/physical-accessibility-to-covid-19-related-health-services-analysis-moru/",
+          "year": "2020",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The study aimed to determine the subnational proportion of the population in Bangladesh that can access COVID-19 testing, treatment, and ICU facilities within 1-3 hours of travel time. The AccessMod open-source package was used to estimate these indicators during the dry season in 2020. The results highlight areas where populations have limited physical access to COVID-19-related health services, and the government should conduct further analyses to improve access. The study also emphasizes the need for regular updates to account for changes in the COVID-19 health services delivery network."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/hfheohhef.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "real-time-population-mapping-to-assess-the-impact-of-travel-restrictions-and-social-distancing-on-covid-19-spread-2020",
+          "title": "Real-time population mapping to assess the impact of travel restrictions and social distancing on COVID-19 spread (2020)",
+          "label": "Real-time population mapping to assess the impact of travel restrictions and social distancing on COVID-19 spread (2020)",
+          "url": "/service/real-time-population-mapping-to-assess-the-impact-of-travel-restrictions-and-social-distancing-on-covid-19-spread-2020/",
+          "year": "2020",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The study conducted in Bangladesh during the COVID-19 pandemic used real-time mobility data from Facebook to analyze the impact of travel restrictions and social distancing on the spread of the virus. The study aimed to assess the effectiveness of spatially and temporally variable enforcement of social distancing on COVID-19 spread. The findings showed that the population of Bangladesh fluctuated during major events throughout the year, and the COVID-19 case count rose and fell in correspondence with these events. This indicates that travel restrictions and social distancing measures had an impact on the spread of COVID-19. The study suggests that real-time population mapping using Facebook data can be a useful tool for analyzing the effectiveness of pandemic mitigation responses."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/htht.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/covie-population.png",
+              "alt": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dengue",
+      "title": "Dengue",
+      "projects": [
+        {
+          "key": "pre-monsoon-aedes-mosquito-survey-nmeatdcp-dghs",
+          "title": "Pre-monsoon Aedes Mosquito Survey – NME&ATDCP, DGHS",
+          "label": "Pre-monsoon Aedes Mosquito Survey",
+          "url": "/service/pre-monsoon-aedes-mosquito-survey-nmeatdcp-dghs/",
+          "year": "2021 - ongoing",
+          "status": "ongoing",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The goal of the project is vector data collection for micro-level planning. This survey will help the Government to tackle the future dengue situation. In order to conduct the survey, training was provided to the data collectors and CDC staff. The surveys are carried out by dividing the study areas into segments. The procedure is as follows: 98 wards were surveyed in 10 days by 21 teams. For this reason, 86 wards are divided into two sections and 10 wards are divided into 3 sections, with one team deployed in each section. Furthermore, each section is divided into four subsections, with three to four houses surveyed from each subsection, for a total of 15 households per section of a ward. Because the remaining two wards cover a bigger area, they were divided into four portions, each with one team. There are a total of 210 sections."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/premonsoon.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/pre-monsoon5-1536x1149.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/WhatsApp-Image-2022-03-23-at-4.43.15-PM-1.jpeg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/pre-monsoon3-1536x1152.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/pre-1024x1024-1.jpg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/pre-monsoon4-1536x1149.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "post-monsoon-aedes-mosquito-survey-nmeatdcp-dghs",
+          "title": "Post-monsoon Aedes Mosquito Survey – NME&ATDCP, DGHS",
+          "label": "Post-monsoon Aedes Mosquito Survey",
+          "url": "/service/post-monsoon-aedes-mosquito-survey-nmeatdcp-dghs/",
+          "year": "2021 - ongoing",
+          "status": "ongoing",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The goal of the project is vector data collection for micro-level planning. This survey will help the Government to tackle the future dengue situation. In order to conduct the survey, training was provided to the data collectors and CDC staff. The surveys are carried out by dividing the study areas into segments. The procedure is as follows: 98 wards were surveyed in 10 days by 20 teams. For this reason, all 96 wards are divided into two sections, with one team deployed in each section. Furthermore, each section is divided into four subsections, with three to four houses surveyed from each subsection, for a total of 15 households per section of a ward. Because the remaining two wards cover a bigger area, they were divided into four portions, each with one team. There are a total of 200 sections (96 x 2 + 2 x 4 = 192 + 8 = 200), with one team surveying one portion per day."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/post-monsoon-pic-5-1536x1152.jpeg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/post-monsoon-pic-3.jpeg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/post-monsoon-pic-2.jpeg",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/post-monsoon-pic-6-1536x1152.jpeg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "dengue-risk-tracker-the-recent-seven-days-dengue-situation-in-dhaka-city-corporations-nmeatdcp-dghs",
+          "title": "Dengue Risk Tracker: The Recent Seven Days Dengue Situation in Dhaka City Corporations – NME&ATDCP, DGHS",
+          "label": "Dengue Risk Tracker (2021)",
+          "url": "/service/dengue-risk-tracker-the-recent-seven-days-dengue-situation-in-dhaka-city-corporations-nmeatdcp-dghs/",
+          "year": "2021",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The aim of this assignment is to develop a results-based monitoring and visualization platform for National Malaria Elimination and Aedes Transmitted Disease Control Program in Bangladesh. The Dengue Risk Tracker is a new collection of data visualization tools designed to aid in the control of dengue fever by reducing the time and distance between discovering new cases and treating them. Anyone with access to the tracker has the opportunity to give information. It was proposed to provide a system for visualizing and using dengue case data at the micro-level for better disease control. It will allow authorities at all levels of the healthcare system to combine data from various sources, evaluate it, and provide insights using user-friendly dashboards. A dashboard is developed showing the dengue situation (Dengue Patient Distribution Map) for seven days in Dhaka City Corporations. The dashboard is developed using ArcGIS. This dashboard is a data visualization and monitoring platform for better planning and resource allocation. The dashboard is designed using 3 key features in mind- creating an existing data visualization platform, creating a micro-planning and data collection platform, and a data monitoring platform."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/Dashboard-Screenshot-4-Augutst.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/Dashboard-2-August.png",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/Capture.JPGjeofjo.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "dengue-household-survey-nmeatdcp-dghs",
+          "title": "Dengue Household Survey – NME&ATDCP, DGHS",
+          "label": "Dengue Household Survey (2019)",
+          "url": "/service/dengue-household-survey-nmeatdcp-dghs/",
+          "year": "2019",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The aim of this project was household-level dengue data collection. Mobile-based data collection platform KoBoToolBox was used in this project. This data was used to tackle the dengue outbreak in Dhaka city. The surveyed site was selected based on the output of dengue drone survey. A total of 182 houses were surveyed, with 40 of them having dengue patients."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/house-hold-servey.jpg",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "dengue-risk-zoning-nmeatdcp-dghs",
+          "title": "Dengue risk zoning – NME&ATDCP, DGHS",
+          "label": "Dengue risk zoning (2019)",
+          "url": "/service/dengue-risk-zoning-nmeatdcp-dghs/",
+          "year": "2019",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The aim of this project was to identify the dengue risk zones on the basis of the dengue patient data. It assisted the government in combating the dengue outbreak by alerting disease surveillance and other sectors about the risk zones and level of danger. The location and other details of the dengue patient were provided by the National Malaria Elimination and Aedes Transmitted Disease Control Program, CDC, DGHS. Twenty volunteers were assigned for dengue data entry and data processing. The location of the patients was plotted on a map. Processed data was used to map the risk zones within Dhaka city. Map of the spatial distribution of the dengue patients and high risk zones were prepared. These maps are based on data of 2059 dengue patients in 22 hospitals in Dhaka. Dengue patient location data, as well as Aedes mosquito density data, have been used. Although the origin of mosquitoes is not identified, the idea of high risk areas can be found on the map. For micro-level risk zoning, this initiative leads to a dengue drone survey and a dengue household survey. For a better understanding and monitoring of the dengue situation, a dashboard was created to visualize the dengue patient distribution and dengue risk zones."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/dengu-risk-zoning-1.webp",
+              "alt": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/dengu-risk-zoning.webp",
+              "alt": ""
+            }
+          ]
+        },
+        {
+          "key": "unmanned-aerial-vehicles-uav-for-aedes-mosquito-breeding-zone-detection-nmeatdcp-dghs",
+          "title": "Drone driven imageries to identify breeding space in Dhaka",
+          "label": "Drone driven imageries to identify breeding space in Dhaka (2019)",
+          "url": "/service/unmanned-aerial-vehicles-uav-for-aedes-mosquito-breeding-zone-detection-nmeatdcp-dghs/",
+          "year": "2019",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The aim of this project is to develop an integrated system to detect mosquito breeding zones in the cityscape using UAV captured imageries combined with machine learning and manual feature extracting approach to automatically detect potential breeding zone from high-resolution imageries, and further incorporate the datasets in a real-time monitoring dashboard system to facilitate prompt and effective actions to prevent the disease.Based on the dengue case distribution map, three drone survey areas were selected- Mirpur, Gulshan, Narinda. The survey was carried out with the help of an unmanned aerial vehicle (UAV). Pix4DMappers processed the UAV data in three major steps (pre-processing, Point Cloud Generation, and Digital Surface Model (DSM)-Orthophoto Generations). The process of data collection encompassed the following: Flight planning, Image acquisition and processing, and digitization of features using geospatial analysis. High-resolution imageries were at the center of this data hub and different survey methods eg. mobile applications, online surveys, community engagement, or participatory approaches were applied. Focuses on the findings: Discarded tyres, Flower pot/Rooftop agriculture, Open water tanks, Polythenes, Open reservoirs on the roof, Air conditioners, Others important habitats. Collected data is stored and manipulated in an integrated dashboard system. A simple web application is developed which provides standard mapping interface features eg. online query or search, reporting, statistical representation, zooming and panning to a particular area, and identification of the features."
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/unmanned.png",
+              "alt": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "rabies",
+      "title": "Rabies",
+      "projects": [
+        {
+          "key": "project-summary",
+          "title": "Project Summary",
+          "label": "Project Summary",
+          "url": "/service/rabies/project-summary/",
+          "year": "2018 - ongoing",
+          "status": "ongoing",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "The National Rabies Elimination Program in Bangladesh, supported by GroupMappers, focuses on achieving herd immunity and controlling rabies through mass dog vaccination. GroupMappers plays a crucial role in ensuring the vaccination of at least 70% of dogs across the country.\n\nThe program includes training for animal control staff, digital map making, evaluation programs, and training on dog catching and vaccination. It has significantly impacted people’s perception of animal welfare and increased awareness about anti-rabies vaccines and treatment. The program has made substantial progress in eliminating rabies and safeguarding public health in Bangladesh.\n\nClient: National Rabies Elimination Program, CDC, DGHS"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/18.GroupMappers-Showcase.jpg",
+              "alt": "Project Summary"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/rabies.jpg",
+              "alt": "Project Summary"
+            }
+          ]
+        },
+        {
+          "key": "animal-control-staff-training-2018-ongoing",
+          "title": "Animal Control Staff Training",
+          "label": "Animal Control Staff Training (2018 - ongoing)",
+          "url": "/service/rabies/animal-control-staff-training-2018-ongoing/",
+          "year": "2018 - ongoing",
+          "status": "ongoing",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "A training program to assist with Rabies Elimination Program, Bangladesh. The purpose of this project was to offer practical instruction to the staff who are responsible for administering the vaccines and entering the dog vaccination data. It takes place upazila-wise once a year before MDV campaigns to train the staffs related to vaccine."
+            }
+          ]
+        },
+        {
+          "key": "digital-map-making-and-demarcation-of-union-boundary-2020",
+          "title": "Digital map making and demarcation of union boundary",
+          "label": "Digital map making and demarcation of union boundary (2020)",
+          "url": "/service/rabies/digital-map-making-and-demarcation-of-union-boundary-2020/",
+          "year": "2020",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "A project to create digital maps for a mass dog vaccination program."
+            }
+          ]
+        },
+        {
+          "key": "cdc-atlanta-training-2018",
+          "title": "CDC Atlanta Training",
+          "label": "CDC Atlanta Training (2018)",
+          "url": "/service/rabies/cdc-atlanta-training-2018/",
+          "year": "2018",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "This project assisted the Centers for Disease Control and Prevention (CDC) Atlanta, USA in a study based on oral bait preference for dog vaccination in Bangladesh."
+            }
+          ]
+        },
+        {
+          "key": "four-day-introductory-training-on-dog-catching-vaccination-for-national-team-2021",
+          "title": "Four Day Introductory Training on Dog Catching & Vaccination for National Team",
+          "label": "Four Day Introductory Training on Dog Catching & Vaccination for National Team (2021)",
+          "url": "/service/rabies/four-day-introductory-training-on-dog-catching-vaccination-for-national-team-2021/",
+          "year": "2021",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "A training program for dog catching and vaccination with FAO."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "filariasis",
+      "title": "Filariasis",
+      "projects": [
+        {
+          "key": "survey-for-assessing-the-prevalence-of-soil-transmitted-helminths-sth-among-school-aged-children-of-bangladesh-2018",
+          "title": "Survey for assessing the prevalence of Soil-Transmitted Helminths (STH) among school-aged children of Bangladesh",
+          "label": "Survey for assessing the prevalence of Soil-Transmitted Helminths (STH) among school-aged children of Bangladesh (2018)",
+          "url": "/service/survey-for-assessing-the-prevalence-of-soil-transmitted-helminths-sth-among-school-aged-children-of-bangladesh-2018/",
+          "year": "2018",
+          "status": "completed",
+          "content": [
+            {
+              "type": "paragraph",
+              "text": "GroupMappers’ support to the National ELF and STH Control Program\n\nOne of the initiatives we’re proud of is our support for the National ELF and STH Control Program among school-aged children as part of The Integrated Community-based Survey. With this project, our aim was to not only create a locational map for evaluation of the STH prevalence, but also to increase the capacity of the program.\n\nWe used digital forms to survey over 5000 children from 84 schools in 51 districts to produce population-representative results and identify district-specific epidemiologic findings for program decisions."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nonDiseases": [
+    {
+      "key": "ghfd",
+      "title": "The Global Health Facilities Database (GHFD)",
+      "label": "The Global Health Facilities Database (GHFD) (2020 - ongoing)",
+      "url": "/service/the-global-health-facilities-database-ghfd-2020-ongoing/",
+      "year": "2020 - ongoing",
+      "status": "ongoing",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "The Global Health Facilities Database (GHFD)\n\nThe goal of this project is to ensure that Ministries of Health in WHO Member States have access to an updated and comprehensive master list of health facilities. This list will be considered a Global Public Good and will aid in avoiding duplication of efforts and using technical capacity to maintain and use data to address public health priorities. The mission is to enhance the technical capacity of Ministries of Health across different levels to guarantee the availability, quality, accessibility, and utilization of this master list of health facilities.\n\nAs a part of the GHFD, BD team prepared a baseline report on the availability and accessibility of the Master List of Health Facilities in Bangladesh . The report summarizes that the current situation in Bangladesh regarding the Global Health Facilities Data Initiative has some issues, such as the absence of a confirmed department responsible for curating the master list of health facilities, missing data dictionary, and potential data discrepancies. The documentation of data quality dimensions and standard operating procedures for data collection and updating are incomplete. capacity of Ministries of Health to maintain and use a master list of health facilities, in order to address public health. priorities and avoid duplication of efforts.\n\nAs part of the GHFD initiative, we could support the MOHFW across the following 7 pathways:\n\n• Governance and policies\n• Data management and interoperability\n• Innovation and technology\n• Capacity\n• Partnership & Collaboration\n• Financial Sustainability\n• Advocacy and communication"
+        },
+        {
+          "type": "image",
+          "src": "/assets/images/rehthrt.webp",
+          "alt": ""
+        },
+        {
+          "type": "image",
+          "src": "/assets/images/egbrregre.webp",
+          "alt": ""
+        }
+      ]
+    }
+  ]
+}
