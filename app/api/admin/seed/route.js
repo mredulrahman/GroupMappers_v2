@@ -7,7 +7,6 @@ import newsData from "../../../../src/assets/data/news-data.json";
 import profileData from "../../../../src/assets/data/profile.json";
 import rabiesData from "../../../../src/assets/data/rabies-data.json";
 import profilesData from "../../../../src/assets/data/profile.json";
-import statItemsData from "../../../../src/assets/data/stat-data.json";
 import galleryData from "../../../../src/assets/data/galleryPage-data.json";
 
 
@@ -32,18 +31,6 @@ function normalizeItems() {
   //   },
   // }));
 
-  const statItems = statItemsData.statItems.map((item) => ({
-    type: "bytheNumbers",
-    body: item.label,
-    slug: item.key,
-    title: item.key,
-    status: "published",
-    images: item.icon,
-    summary: item.value,
-    metadata: {
-      legacyKey: item.key || "",
-    },
-  }));
 
   const galleryItems = galleryData.images.map((item, index) => ({
     type: "galleryItem",
@@ -107,7 +94,7 @@ function normalizeItems() {
     },
   }));
 
-  return [...news, ...activities, ...teamMembers, ...rabiesPages, ...galleryItems, ...statItems];
+  return [...news, ...activities, ...teamMembers, ...rabiesPages, ...galleryItems];
 }
 
 export async function POST(request) {

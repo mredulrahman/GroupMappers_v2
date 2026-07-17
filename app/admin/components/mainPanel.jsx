@@ -10,7 +10,6 @@ import {
   getContentTypeConfig,
   getContentTypeLabel,
   homeSections,
-  pageItems,
   activityPageItems,
   projectPageItems,
   projectSlugSequence,
@@ -140,6 +139,102 @@ function mergeExpectedPages(items, expectedPages) {
   });
 }
 
+function getHomeSectionPreview(sectionData) {
+  if (!sectionData) return "No saved content yet";
+  if (sectionData.title) return `Title: "${sectionData.title}"`;
+  if (sectionData.slider?.length) return `${sectionData.slider.length} slide(s)`;
+  if (sectionData.cardContent?.length) return `${sectionData.cardContent.length} card(s)`;
+  if (sectionData.accordianContent?.length) return `${sectionData.accordianContent.length} accordion item(s)`;
+  if (sectionData.items?.length) return `${sectionData.items.length} item(s)`;
+  if (sectionData.content) return sectionData.content;
+  return "No preview";
+}
+
+function ContentCardActions({ item, openMenuId, setOpenMenuId, handleArchiveById, handleDeleteById }) {
+  if (item.isPlaceholder) return null;
+
+  return (
+    <div className="absolute top-2 right-2 z-20">
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === item._id ? null : item._id); }}
+        className="flex items-center justify-center w-7 h-7 rounded text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-150 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
+        title="More options"
+      >
+        <EllipsisVertical size={15} />
+      </button>
+      {openMenuId === item._id && (
+        <div className="absolute right-0 top-full mt-1 w-24 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-20" onClick={(e) => e.stopPropagation()}>
+          <button type="button" onClick={() => handleArchiveById(item)} className="flex items-center gap-2 w-full px-3 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"><Archive size={12} /><span className="text-xs">Archive</span></button>
+          <button
+            type="button"
+            onClick={() => { if (window.confirm(`Delete "${item.title || item.slug || "Untitled"}"? This cannot be undone.`)) { handleDeleteById(item); } else { setOpenMenuId(null); } }}
+            className="flex items-center gap-2 w-full px-3 py-2 text-xs text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <Trash2 size={12} /><span className="text-xs">Delete</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HomeSectionCard({ section, sectionData, onSelect, openMenuId, setOpenMenuId, handleArchiveHomeSection, handleDeleteHomeSection }) {
+  const hasContent = Boolean(sectionData);
+  const menuId = `home-section-${section.id}`;
+  const status = sectionData?.status || (hasContent ? "saved" : "empty");
+  const statusClass =
+    status === "archived"
+      ? "bg-slate-100 text-slate-500"
+      : status === "draft"
+        ? "bg-amber-50 text-amber-600"
+        : hasContent
+          ? "bg-emerald-50 text-emerald-600"
+          : "bg-slate-100 text-slate-400";
+
+  return (
+    <div
+      onClick={onSelect}
+      className="group relative bg-white rounded-lg border border-slate-200 p-4 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all flex flex-col h-[140px]"
+    >
+      {hasContent && (
+        <div className="absolute top-2 right-2 z-20">
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === menuId ? null : menuId); }}
+            className="flex items-center justify-center w-7 h-7 rounded text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-150 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
+            title="More options"
+          >
+            <EllipsisVertical size={15} />
+          </button>
+          {openMenuId === menuId && (
+            <div className="absolute right-0 top-full mt-1 w-24 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-20" onClick={(e) => e.stopPropagation()}>
+              <button type="button" onClick={() => handleArchiveHomeSection(sectionData)} className="flex items-center gap-2 w-full px-3 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"><Archive size={12} /><span className="text-xs">Archive</span></button>
+              <button
+                type="button"
+                onClick={() => { if (window.confirm(`Delete "${sectionData.title || section.label || section.id}"? This cannot be undone.`)) { handleDeleteHomeSection(sectionData); } else { setOpenMenuId(null); } }}
+                className="flex items-center gap-2 w-full px-3 py-2 text-xs text-red-600 hover:bg-red-50 transition-colors"
+              >
+                <Trash2 size={12} /><span className="text-xs">Delete</span>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+      <div className="flex-1 min-h-0">
+        <h3 className="font-semibold text-slate-900 truncate group-hover:text-blue-700 transition-colors pr-6">{section.label}</h3>
+        <p className="text-sm text-slate-500 mt-1 line-clamp-2">{getHomeSectionPreview(sectionData)}</p>
+      </div>
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 flex-shrink-0">
+        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">{section.id}</span>
+        <span className={`text-xs font-medium px-2 py-1 rounded ${statusClass}`}>
+          {status}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function Field({ label, value, onChange, placeholder = "", type = "text" }) {
   return (
     <label className={labelClass()}>
@@ -159,12 +254,16 @@ function TextArea({ label, value, onChange, rows = 4, placeholder = "" }) {
 }
 
 
-function SlideListEditor({ slides = [], onChange, srcField = "src", altField = "alt1" }) {
+function SlideListEditor({ slides = [], onChange, srcField = "src", altField = "alt1", thumbField = null }) {
   function update(idx, key, val) {
     const next = slides.map((s, i) => i === idx ? { ...s, [key]: val } : s);
     onChange(next);
   }
-  function add() { onChange([...slides, { [srcField]: "", [altField]: "" }]); }
+  function add() {
+    const newItem = { [srcField]: "", [altField]: "" };
+    if (thumbField) newItem[thumbField] = "";
+    onChange([...slides, newItem]);
+  }
   function remove(idx) { onChange(slides.filter((_, i) => i !== idx)); }
 
   return (
@@ -182,6 +281,7 @@ function SlideListEditor({ slides = [], onChange, srcField = "src", altField = "
             {slide[srcField] && <img src={slide[srcField]} alt="" className="w-16 h-10 object-cover rounded border" onError={(e) => { e.target.style.display = 'none'; }} />}
           </div>
           <input value={slide[srcField] || ""} onChange={(e) => update(idx, srcField, e.target.value)} placeholder="Image path e.g. /assets/images/photo.jpg" className={fieldClass()} />
+          {thumbField && <input value={slide[thumbField] || ""} onChange={(e) => update(idx, thumbField, e.target.value)} placeholder="Thumbnail text e.g. thumb-1" className={fieldClass()} />}
           <input value={slide[altField] || ""} onChange={(e) => update(idx, altField, e.target.value)} placeholder="Alt text" className={fieldClass()} />
         </div>
       ))}
@@ -276,7 +376,7 @@ function NewsCardEditor({ cards = [], onChange }) {
 
 function NumberItemsEditor({ items = [], onChange }) {
   function update(idx, key, val) { onChange(items.map((item, i) => i === idx ? { ...item, [key]: val } : item)); }
-  function add() { onChange([...items, { key: `stat-${Date.now()}`, value: "", label: "" }]); }
+  function add() { onChange([...items, { key: `stat-${Date.now()}`, value: "", label: "", icon: "" }]); }
   function remove(idx) { onChange(items.filter((_, i) => i !== idx)); }
 
   return (
@@ -289,13 +389,13 @@ function NumberItemsEditor({ items = [], onChange }) {
         <div key={idx} className="flex gap-2 items-center p-3 rounded border border-slate-200 bg-slate-50 relative">
           <input value={item.value || ""} onChange={(e) => update(idx, "value", e.target.value)} placeholder="Value e.g. 50+" className={`${fieldClass()} w-28 flex-shrink-0`} />
           <input value={item.label || ""} onChange={(e) => update(idx, "label", e.target.value)} placeholder="Label e.g. Active Volunteers" className={fieldClass()} />
+          <input value={item.icon || ""} onChange={(e) => update(idx, "icon", e.target.value)} placeholder="Icon code" className={`${fieldClass()} w-32 flex-shrink-0`} />
           <button type="button" onClick={() => remove(idx)} className="text-slate-300 hover:text-red-500 flex-shrink-0"><X size={14} /></button>
         </div>
       ))}
     </div>
   );
 }
-
 
 function HomeSectionEditor({ sectionId, homeSectionData, saveHomeSection, isSavingSection, sectionMessage }) {
   const raw = homeSectionData[sectionId] || {};
@@ -310,7 +410,6 @@ function HomeSectionEditor({ sectionId, homeSectionData, saveHomeSection, isSavi
   const [accordianContent, setAccordianContent] = useState(raw.accordianContent || []);
   const [cardContent, setCardContent] = useState(raw.cardContent || []);
   const [items, setItems] = useState(raw.items || []);
-
 
   useEffect(() => {
     const d = homeSectionData[sectionId] || {};
@@ -371,7 +470,7 @@ function HomeSectionEditor({ sectionId, homeSectionData, saveHomeSection, isSavi
       {sectionId === "hero" && (
         <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="font-semibold text-slate-700 mb-4 text-sm">Hero Slider Images</h3>
-          <SlideListEditor slides={slider} onChange={setSlider} srcField="src" altField="alt1" />
+          <SlideListEditor slides={slider} onChange={setSlider} srcField="src" altField="alt1" thumbField="thumb" />
         </div>
       )}
 
@@ -462,7 +561,6 @@ function HomeSectionEditor({ sectionId, homeSectionData, saveHomeSection, isSavi
         </div>
       )}
 
-
       {sectionId === "by-the-number" && (
         <>
           <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
@@ -473,6 +571,7 @@ function HomeSectionEditor({ sectionId, homeSectionData, saveHomeSection, isSavi
           </div>
         </>
       )}
+
     </form>
   );
 }
@@ -489,21 +588,23 @@ export default function MainPanel() {
     search, setSearch,
     openMenuId, setOpenMenuId,
     selectedPageItem, setSelectedPageItem,
-    sections, setSections,
+    sections,
     selectedSection, setSelectedSection,
     homeSectionData,
     isSavingSection, sectionMessage, setSectionMessage,
     handleStatusColor, timeAgo,
     handleSubmit, handleDeleteById, handleArchiveById, handleSeed, selectItem, loadItems,
-    loadHomeSections, saveHomeSection,
+    updateContactStatus, deleteContactById,
+    loadHomeSections, saveHomeSection, handleArchiveHomeSection, handleDeleteHomeSection,
   } = useAdmin();
 
 
   useEffect(() => {
-    if (selectedPageItem?.label === "Home Page") {
+    if (filter === "home" || selectedPageItem?.label === "Home Page") {
       loadHomeSections();
     }
-  }, [selectedPageItem]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, selectedPageItem]);
 
   const filteredItems = items.filter((item) => {
     const keyword = search.toLowerCase();
@@ -511,7 +612,11 @@ export default function MainPanel() {
       item.title?.toLowerCase().includes(keyword) ||
       item.slug?.toLowerCase().includes(keyword) ||
       item.type?.toLowerCase().includes(keyword) ||
-      item.status?.toLowerCase().includes(keyword)
+      item.status?.toLowerCase().includes(keyword) ||
+      item.name?.toLowerCase().includes(keyword) ||
+      item.email?.toLowerCase().includes(keyword) ||
+      item.subject?.toLowerCase().includes(keyword) ||
+      item.message?.toLowerCase().includes(keyword)
     );
   });
 
@@ -529,9 +634,24 @@ export default function MainPanel() {
         ? orderItemsBySlug(visibleItems, activitySlugSequence)
         : visibleItems;
 
+  const filteredHomeSections = sections.filter((section) => {
+    if (filter !== "home") return true;
+    const keyword = search.toLowerCase();
+    const sectionData = homeSectionData[section.id];
+    return (
+      section.label.toLowerCase().includes(keyword) ||
+      section.id.toLowerCase().includes(keyword) ||
+      section.description?.toLowerCase().includes(keyword) ||
+      sectionData?.title?.toLowerCase().includes(keyword) ||
+      sectionData?.content?.toLowerCase().includes(keyword)
+    );
+  });
+
   const filterConfig = getContentTypeConfig(filter);
   const filterLabel = getContentTypeLabel(filter);
   const createType = filterConfig?.createType || filter || "page";
+  const isContactInbox = Boolean(filterConfig?.contactSource);
+  const homePageItem = { slug: "", label: "Home Page", description: "home page" };
 
   const isEditingHomeSection = selectedPageItem?.label === "Home Page" && selectedSection && isCreating;
 
@@ -630,13 +750,15 @@ export default function MainPanel() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setShowPreview(!showPreview)}
-            className={`rounded px-4 py-1.5 text-sm font-medium transition-colors ${showPreview ? "bg-slate-200 text-slate-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}`}
-          >
-            {showPreview ? "Hide Preview" : "Preview"}
-          </button>
+          {!isContactInbox && (
+            <button
+              type="button"
+              onClick={() => setShowPreview(!showPreview)}
+              className={`rounded px-4 py-1.5 text-sm font-medium transition-colors ${showPreview ? "bg-slate-200 text-slate-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}`}
+            >
+              {showPreview ? "Hide Preview" : "Preview"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -670,39 +792,23 @@ export default function MainPanel() {
               </button>
             </div>
 
-            <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-visible">
-              {sections.map((section, idx) => (
-                <div
+            <div className={`grid grid-cols-1 gap-4 ${showPreview ? "xl:grid-cols-3 lg:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"}`}>
+              {openMenuId && <div className="fixed inset-0 z-10" onClick={() => setOpenMenuId(null)} />}
+              {sections.map((section) => (
+                <HomeSectionCard
                   key={section.id}
-                  onClick={() => {
+                  section={section}
+                  sectionData={homeSectionData[section.id]}
+                  openMenuId={openMenuId}
+                  setOpenMenuId={setOpenMenuId}
+                  handleArchiveHomeSection={handleArchiveHomeSection}
+                  handleDeleteHomeSection={handleDeleteHomeSection}
+                  onSelect={() => {
                     setSelectedSection(section);
                     setIsCreating(true);
                     setSectionMessage("");
                   }}
-                  className="group flex items-center gap-4 px-5 py-4 border-b border-slate-100 last:border-0 hover:bg-blue-50/40 transition-colors cursor-pointer"
-                >
-                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-100 text-slate-500 text-xs font-semibold flex items-center justify-center group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
-                    {idx + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <span className="font-semibold text-slate-800 group-hover:text-blue-700 transition-colors text-sm">
-                      {section.label}
-                    </span>
-
-                    {homeSectionData[section.id] && (
-                      <p className="text-xs text-slate-400 mt-0.5 truncate">
-                        {homeSectionData[section.id].title
-                          ? `Title: "${homeSectionData[section.id].title}"`
-                          : homeSectionData[section.id].slider?.length
-                            ? `${homeSectionData[section.id].slider.length} slide(s)`
-                            : "No preview"}
-                      </p>
-                    )}
-                  </div>
-                  <span className="text-xs text-blue-600 group-hover:underline font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                    Edit →
-                  </span>
-                </div>
+                />
               ))}
             </div>
           </div>
@@ -711,18 +817,20 @@ export default function MainPanel() {
           <div className="p-6 max-w-6xl mx-auto flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <h2 className="text-2xl font-bold text-slate-800">
-                {filter ? `${filterLabel} Items` : "All Content"}
+                {isContactInbox ? `${filterLabel} Messages` : filter === "home" ? "Home Sections" : filter ? `${filterLabel} Items` : "All Content"}
               </h2>
               <div className="flex gap-2">
-                <button onClick={handleSeed} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Import JSON</button>
-                <button onClick={() => loadItems()} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Refresh</button>
-                <button
-                  onClick={() => { setSelectedId(null); setIsCreating(true); setForm({ ...emptyForm, type: createType }); }}
-                  className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
-                  type="button"
-                >
-                  + New {filter ? filterLabel : "content"}
-                </button>
+                {!isContactInbox && filter !== "home" && <button onClick={handleSeed} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Import JSON</button>}
+                <button onClick={() => filter === "home" ? loadHomeSections() : loadItems()} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Refresh</button>
+                {!isContactInbox && filter !== "home" && (
+                  <button
+                    onClick={() => { setSelectedId(null); setIsCreating(true); setForm({ ...emptyForm, type: createType }); }}
+                    className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
+                    type="button"
+                  >
+                    + New {filter ? filterLabel : "content"}
+                  </button>
+                )}
               </div>
             </div>
             <div className="relative group w-[300px] sm:max-w-md transition-all ml-auto mt-5">
@@ -737,59 +845,99 @@ export default function MainPanel() {
                 className="block w-full rounded-full border border-slate-200 bg-white/80 backdrop-blur-sm py-1 pl-12 pr-5 text-sm text-slate-800 shadow-sm transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/15 hover:border-slate-300 hover:bg-white hover:shadow"
               />
             </div>
-            {filter === "home" ? (
+            {isContactInbox ? (
               <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200">
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600">Page</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden sm:table-cell">Description</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden md:table-cell">Slug</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600">Status</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden lg:table-cell">Last Updated</th>
-                      <th className="px-5 py-3"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pageItems.map((pageItem) => {
-                      const dbItem = items.find((i) => i.slug === pageItem.slug && i.type === "page");
-                      const isHomePage = pageItem.label === "Home Page";
-                      return (
-                        <tr
-                          key={pageItem.slug}
-                          onClick={() => {
-                            if (isHomePage) {
-                              setSelectedPageItem(pageItem);
-                              setSections(homeSections);
-                            } else if (dbItem) {
-                              selectItem(dbItem);
-                            } else {
-                              setSelectedId(null);
-                              setIsCreating(true);
-                              setForm({ ...emptyForm, type: "page", slug: pageItem.slug, title: pageItem.label });
-                            }
-                          }}
-                          className="border-b border-slate-100 last:border-0 hover:bg-blue-50/50 cursor-pointer transition-colors group"
-                        >
-                          <td className="px-5 py-4"><span className="font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">{pageItem.label}</span></td>
-                          <td className="px-5 py-4 text-slate-500 hidden sm:table-cell">{pageItem.description}</td>
-                          <td className="px-5 py-4 hidden md:table-cell"><code className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-mono">/{pageItem.slug}</code></td>
+                {orderedItems.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <h3 className="text-lg font-medium text-slate-900">No messages found</h3>
+                    <p className="text-slate-500 mt-1">Submissions from this form will appear here.</p>
+                  </div>
+                ) : (
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200">
+                        <th className="text-left px-5 py-3 font-semibold text-slate-600">Sender</th>
+                        <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden md:table-cell">Subject</th>
+                        <th className="text-left px-5 py-3 font-semibold text-slate-600">Message</th>
+                        <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden lg:table-cell">Received</th>
+                        <th className="text-left px-5 py-3 font-semibold text-slate-600">Status</th>
+                        <th className="px-5 py-3"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orderedItems.map((item) => (
+                        <tr key={item._id} className="border-b border-slate-100 last:border-0 align-top">
                           <td className="px-5 py-4">
-                            {isHomePage ? (
-                              <span className="text-xs font-medium px-2 py-1 rounded bg-green-100 text-green-600">live</span>
-                            ) : dbItem ? (
-                              <span className="text-xs font-medium px-2 py-1 rounded capitalize" style={{ color: handleStatusColor(dbItem.status), backgroundColor: `${handleStatusColor(dbItem.status)}15` }}>{dbItem.status}</span>
-                            ) : (
-                              <span className="text-xs font-medium px-2 py-1 rounded bg-slate-100 text-slate-400">not created</span>
-                            )}
+                            <div className="font-semibold text-slate-800">{item.name || "Unknown"}</div>
+                            <a href={`mailto:${item.email}`} className="text-xs text-blue-600 hover:underline">{item.email}</a>
                           </td>
-                          <td className="px-5 py-4 text-slate-400 text-xs hidden lg:table-cell">{dbItem?.updatedAt ? timeAgo(dbItem.updatedAt) : "—"}</td>
-                          <td className="px-5 py-4 text-right"><span className="text-xs text-blue-600 group-hover:underline font-medium">{isHomePage ? "View Sections →" : dbItem ? "Edit →" : "Create →"}</span></td>
+                          <td className="px-5 py-4 text-slate-700 hidden md:table-cell">{item.subject || "No subject"}</td>
+                          <td className="px-5 py-4 text-slate-600 max-w-md">
+                            <p className="line-clamp-3">{item.message}</p>
+                          </td>
+                          <td className="px-5 py-4 text-slate-400 text-xs hidden lg:table-cell">{item.createdAt ? timeAgo(item.createdAt) : "—"}</td>
+                          <td className="px-5 py-4">
+                            <select
+                              value={item.status || "new"}
+                              onChange={(event) => updateContactStatus(item._id, event.target.value)}
+                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs capitalize outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                              style={{ color: handleStatusColor(item.status || "new") }}
+                            >
+                              <option value="new">New</option>
+                              <option value="read">Read</option>
+                              <option value="replied">Replied</option>
+                              <option value="archived">Archived</option>
+                            </select>
+                          </td>
+                          <td className="px-5 py-4 text-right">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (window.confirm(`Delete message from "${item.name || item.email || "this sender"}"? This cannot be undone.`)) {
+                                  deleteContactById(item._id);
+                                }
+                              }}
+                              className="inline-flex items-center justify-center rounded border border-red-200 p-1.5 text-red-600 hover:bg-red-50 transition-colors"
+                              title="Delete message"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </td>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            ) : filter === "home" ? (
+              <div className={`grid grid-cols-1 gap-4 ${showPreview ? "xl:grid-cols-3 lg:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
+                {openMenuId && <div className="fixed inset-0 z-10" onClick={() => setOpenMenuId(null)} />}
+                {filteredHomeSections.map((section) => {
+                  const sectionData = homeSectionData[section.id];
+                  return (
+                    <HomeSectionCard
+                      key={section.id}
+                      section={section}
+                      sectionData={sectionData}
+                      openMenuId={openMenuId}
+                      setOpenMenuId={setOpenMenuId}
+                      handleArchiveHomeSection={handleArchiveHomeSection}
+                      handleDeleteHomeSection={handleDeleteHomeSection}
+                      onSelect={() => {
+                        setSelectedPageItem(homePageItem);
+                        setSelectedSection(section);
+                        setIsCreating(true);
+                        setSectionMessage("");
+                      }}
+                    />
+                  );
+                })}
+                {filteredHomeSections.length === 0 && (
+                  <div className="md:col-span-2 lg:col-span-3 xl:col-span-4 bg-white rounded-lg border border-slate-200 p-12 text-center shadow-sm">
+                    <h3 className="text-lg font-medium text-slate-900">No sections found</h3>
+                    <p className="text-slate-500 mt-1">Try a different search term.</p>
+                  </div>
+                )}
               </div>
             ) : orderedItems.length === 0 ? (
               <div className="bg-white rounded-lg border border-slate-200 p-12 text-center shadow-sm">
@@ -816,28 +964,13 @@ export default function MainPanel() {
                     }}
                     className="group relative bg-white rounded-lg border border-slate-200 p-4 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all flex flex-col h-[140px]"
                   >
-                    {!item.isPlaceholder && <div className="absolute top-2 right-2 z-20">
-                      <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === item._id ? null : item._id); }}
-                        className="flex items-center justify-center w-7 h-7 rounded text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-150 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
-                        title="More options"
-                      >
-                        <EllipsisVertical size={15} />
-                      </button>
-                      {openMenuId === item._id && (
-                        <div className="absolute right-0 top-full mt-1 w-24 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-20" onClick={(e) => e.stopPropagation()}>
-                          <button type="button" onClick={() => handleArchiveById(item)} className="flex items-center gap-2 w-full px-3 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"><Archive size={12} /><span className="text-xs">Archive</span></button>
-                          <button
-                            type="button"
-                            onClick={() => { if (window.confirm(`Delete "${item.title || item.slug || "Untitled"}"? This cannot be undone.`)) { handleDeleteById(item); } else { setOpenMenuId(null); } }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-xs text-red-600 hover:bg-red-50 transition-colors"
-                          >
-                            <Trash2 size={12} /><span className="text-xs">Delete</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>}
+                    <ContentCardActions
+                      item={item}
+                      openMenuId={openMenuId}
+                      setOpenMenuId={setOpenMenuId}
+                      handleArchiveById={handleArchiveById}
+                      handleDeleteById={handleDeleteById}
+                    />
                     <div className="flex-1 min-h-0">
                       <h3 className="font-semibold text-slate-900 truncate group-hover:text-blue-700 transition-colors pr-6">{item.title || "Untitled"}</h3>
                       <p className="text-sm text-slate-500 mt-1 line-clamp-2">{item.summary || item.slug || "No summary provided."}</p>

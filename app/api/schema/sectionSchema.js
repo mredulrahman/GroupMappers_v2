@@ -49,6 +49,11 @@ const SectionSchema = new mongoose.Schema(
             type: Array,
             required: false,
             default: []
+        },
+        status: {
+            type: String,
+            enum: ["draft", "published", "archived"],
+            default: "published"
         }
     },
     { timestamps: true }

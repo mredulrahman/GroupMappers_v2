@@ -15,11 +15,13 @@ export const contentTypes = [
   { value: "news", label: "News", queryTypes: ["news"], createType: "news", apiLink: "/api/public/content?type=news" },
   { value: "projects", label: "Projects", queryTypes: ["project", "rabiesPage"], createType: "project", apiLink: "/api/public/content?type=project" },
   { value: "activities", label: "Activities", queryTypes: ["activity"], createType: "activity", apiLink: "/api/public/content?type=activity" },
-  { value: "contact-us", label: "Contact Us", queryTypes: ["contact-us"], createType: "contact-us", apiLink: "/api/public/content?type=contact-us" },
   { value: "donate-us", label: "Donate Us", queryTypes: ["donate-us"], createType: "donate-us", apiLink: "/api/public/content?type=donate-us" },
-  { value: "footer", label: "Footer", queryTypes: ["footer"], createType: "footer", apiLink: "/api/public/content?type=footer" },
-  { value: "contact", label: "Contact", queryTypes: ["contact"], createType: "contact", apiLink: "/api/public/content?type=contact" },
+  { value: "contact-us", label: "Contact Us", queryTypes: ["contact-us"], apiLink: "/api/contact?source=contact-us", contactSource: "contact-us" },
+  { value: "footer", label: "Footer", queryTypes: ["footer"], apiLink: "/api/contact?source=footer", contactSource: "footer" },
+  { value: "contact-form", label: "Contact Form", queryTypes: ["contact-form"], apiLink: "/api/contact?source=contact-form", contactSource: "contact-form" },
 ];
+
+const contactSources = ["contact-us", "footer", "contact-form"];
 
 export const formContentTypes = [
   { value: "page", label: "Home / Page" },
@@ -28,12 +30,8 @@ export const formContentTypes = [
   { value: "news", label: "News" },
   { value: "project", label: "Projects" },
   { value: "activity", label: "Activities" },
-  { value: "contact-us", label: "Contact Us" },
   { value: "donate-us", label: "Donate Us" },
-  { value: "footer", label: "Footer" },
-  { value: "contact", label: "Contact" },
   { value: "rabiesPage", label: "Projects / Rabies" },
-  { value: "bytheNumbers", label: "By the Numbers" },
   { value: "navigation", label: "Navigation" },
   { value: "siteSetting", label: "Site Setting" },
 ];
@@ -56,6 +54,9 @@ export function getContentApiLink(type, slug = "") {
   if (type === "teamMember") {
     return slug ? `/api/team-members/${slug}` : "/api/team-members";
   }
+  if (contactSources.includes(type)) {
+    return `/api/contact?source=${encodeURIComponent(type)}`;
+  }
   if (slug) {
     return `/api/public/content/${encodeURIComponent(type)}/${encodeURIComponent(slug)}`;
   }
@@ -73,15 +74,15 @@ export const pageItems = [
 ];
 
 export const homeSections = [
-  { id: "slider", label: "Slider", description: "" },
+  { id: "hero", label: "Slider", description: "" },
   { id: "who-we-are", label: "Who We Are", description: "" },
   { id: "mission", label: "Mission", description: "" },
   { id: "what-we-do", label: "What We Do", description: "" },
-  { id: "volunteerism", label: "Volunteerism & Support", description: "" },
+  { id: "volunteerism-and-support", label: "Volunteerism & Support", description: "" },
   { id: "founders", label: "Founders", description: "" },
   { id: "latest-news", label: "Latest News", description: "" },
   { id: "join-our-effort", label: "Join Our Effort", description: "" },
-  { id: "by-the-numbers", label: "By the Number", description: "" },
+  { id: "by-the-number", label: "By the Number", description: "" },
 ];
 
 export const emptyForm = {
@@ -161,6 +162,18 @@ function normalizeTeamMembers(data) {
   }));
 }
 
+function normalizeContacts(data) {
+  const contacts = data.contacts || [];
+  return contacts.map((item) => ({
+    ...item,
+    _id: item._id,
+    type: item.source || "contact-form",
+    slug: item.email || item._id,
+    title: item.subject || item.name || "Contact message",
+    summary: item.message || "",
+  }));
+}
+
 const AdminContext = createContext();
 
 export function AdminProvider({ children }) {
@@ -209,6 +222,9 @@ export function AdminProvider({ children }) {
 
   const handleStatusColor = (status) => {
     switch (status) {
+      case 'new': return '#2563eb';
+      case 'read': return '#0891b2';
+      case 'replied': return '#10b981';
       case 'draft': return '#f59e0b';
       case 'published': return '#10b981';
       case 'archived': return '#6b7280';
@@ -261,6 +277,11 @@ export function AdminProvider({ children }) {
         const data = await res.json();
         if (res.ok) allItems = normalizeTeamMembers(data);
         else throw new Error(data.error || data.message || "Failed to load team members");
+      } else if (filterConfig?.contactSource) {
+        const res = await fetch(`/api/contact?source=${encodeURIComponent(filterConfig.contactSource)}`);
+        const data = await res.json();
+        if (res.ok) allItems = normalizeContacts(data);
+        else throw new Error(data.error || data.message || "Failed to load contacts");
       } else if (filter) {
         const responses = await Promise.all(
           queryTypes.map(async (type) => {
@@ -373,6 +394,13 @@ export function AdminProvider({ children }) {
   }
 
   async function handleArchiveById(item) {
+    if (contactSources.includes(item.type)) {
+      await updateContactStatus(item._id, "archived");
+      setOpenMenuId(null);
+      await loadItems();
+      return;
+    }
+
     const isTeamMember = item.type === "teamMember";
     const url = isTeamMember ? `/api/team-members/${item._id}` : `/api/admin/content/${item._id}`;
     const method = isTeamMember ? "PUT" : "PATCH";
@@ -396,6 +424,42 @@ export function AdminProvider({ children }) {
     toast.warning(`"${item.title || "Item"}" archived.`);
     setOpenMenuId(null);
     await loadItems();
+  }
+
+  async function updateContactStatus(id, status) {
+    const response = await fetch("/api/contact", {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ _id: id, status }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.error || data.message || "Status update failed.");
+      return false;
+    }
+
+    toast.success("Contact status updated.");
+    await loadItems();
+    return true;
+  }
+
+  async function deleteContactById(id) {
+    const response = await fetch("/api/contact", {
+      method: "DELETE",
+      headers,
+      body: JSON.stringify({ _id: id }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.error || data.message || "Delete failed.");
+      return false;
+    }
+
+    toast.success("Contact message deleted.");
+    await loadItems();
+    return true;
   }
 
   async function handleSeed() {
@@ -455,6 +519,59 @@ export function AdminProvider({ children }) {
     }
   }
 
+  async function handleArchiveHomeSection(sectionData) {
+    if (!sectionData?._id && !sectionData?.key) return;
+    const sectionPayload = Object.fromEntries(
+      Object.entries(sectionData).filter(([key]) => !["_id", "createdAt", "updatedAt", "__v"].includes(key))
+    );
+
+    const response = await fetch("/api/home", {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ ...sectionPayload, status: "archived" }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Archive failed.");
+      return;
+    }
+
+    toast.warning(`"${sectionData.title || sectionData.key || "Section"}" archived.`);
+    setOpenMenuId(null);
+    await loadHomeSections();
+  }
+
+  async function handleDeleteHomeSection(sectionData) {
+    if (!sectionData?._id) {
+      toast.error("Section has not been saved yet.");
+      setOpenMenuId(null);
+      return;
+    }
+
+    const response = await fetch("/api/home", {
+      method: "DELETE",
+      headers,
+      body: JSON.stringify({ _id: sectionData._id }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Delete failed.");
+      return;
+    }
+
+    if (selectedSection?.id === sectionData.key) {
+      setSelectedSection(null);
+      setIsCreating(false);
+      setSectionMessage("");
+    }
+
+    toast.success(`"${sectionData.title || sectionData.key || "Section"}" deleted.`);
+    setOpenMenuId(null);
+    await loadHomeSections();
+  }
+
   function selectItem(item) {
     setSelectedId(item._id);
     setIsCreating(false);
@@ -486,10 +603,14 @@ export function AdminProvider({ children }) {
     loadItems,
     loadHomeSections,
     saveHomeSection,
+    handleArchiveHomeSection,
+    handleDeleteHomeSection,
     handleSubmit,
     handleDelete,
     handleDeleteById,
     handleArchiveById,
+    updateContactStatus,
+    deleteContactById,
     handleSeed,
     selectItem
   };
