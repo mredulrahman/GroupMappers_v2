@@ -4,18 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "next dev",
     "build": "next build",
     "lint": "eslint .",
     "start": "next start",
     "preview": "next start",
     "seed-team-members": "node scripts/seed-team-members.js",
     "seed-gallery": "node scripts/seedgallery.js",
+    "seed-by-the-numbers": "node scripts/seed-bythenumbers.js",
     "seed-news": "node scripts/seed-news.js",
-    "seed-sections": "node scripts/seed-sections.js",
-    "seed-projects": "node scripts/seed-projects.js",
-    "seed-activities": "node scripts/seed-activities.js",
-    "seed-contact": "node scripts/seed-contact.js"
+    "seed-sections": "node scripts/seed-sections.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -121,10 +119,5 @@
     "tailwindcss": "^4.1.18",
     "tw-animate-css": "^1.4.0",
     "vite": "^7.2.2"
-  },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

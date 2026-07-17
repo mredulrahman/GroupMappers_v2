@@ -10,6 +10,7 @@ const ContentItemSchema = new mongoose.Schema(
         "page",
         "home",
         "profiles",
+        "bytheNumbers",
         "news",
         "project",
         "projects",

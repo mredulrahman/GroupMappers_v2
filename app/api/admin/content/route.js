@@ -9,6 +9,7 @@ const contentSchema = z.object({
     "page",
     "home",
     "profiles",
+    "bytheNumbers",
     "news",
     "project",
     "projects",
