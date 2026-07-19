@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "lint": "eslint .",
     "start": "next start",
@@ -13,7 +13,8 @@
     "seed-gallery": "node scripts/seedgallery.js",
     "seed-by-the-numbers": "node scripts/seed-bythenumbers.js",
     "seed-news": "node scripts/seed-news.js",
-    "seed-sections": "node scripts/seed-sections.js"
+    "seed-sections": "node scripts/seed-sections.js",
+    "seed-contact": "node scripts/seed-contact.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

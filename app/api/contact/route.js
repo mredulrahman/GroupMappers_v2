@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connectMongo } from "../../../src/lib/mongodb";
 import Contact from "../schema/contactSchema";
 
-const validSources = ["contact-us", "footer", "contact-form"];
+const validSources = ["contact-us", "footer", "contact", "contact-form"];
 const validStatuses = ["new", "read", "replied", "archived"];
 
 // POST /api/contact — submit a contact form
@@ -15,7 +15,7 @@ export async function POST(request) {
         const email = body.email?.trim().toLowerCase();
         const subject = body.subject?.trim() || "";
         const message = body.message?.trim();
-        const source = body.source || "contact-form";
+        const source = body.source || "contact";
 
         if (!name || !email || !message) {
             return NextResponse.json(
@@ -89,13 +89,14 @@ export async function GET(request) {
     }
 }
 
-// PATCH /api/contact — update status of a submission
+// PATCH /api/contact — update a contact record
 export async function PATCH(request) {
     try {
         await connectMongo();
-        const { _id, status } = await request.json();
+        const body = await request.json();
+        const { _id, status } = body;
 
-        if (!validStatuses.includes(status)) {
+        if (status && !validStatuses.includes(status)) {
             return NextResponse.json(
                 { message: "Invalid status value." },
                 { status: 400 }
@@ -109,11 +110,22 @@ export async function PATCH(request) {
             );
         }
 
-        const updated = await Contact.findByIdAndUpdate(
-            _id,
-            { status },
-            { new: true }
-        );
+        const update = {};
+        ["name", "email", "subject", "message", "source", "status"].forEach((field) => {
+            if (body[field] !== undefined) update[field] = body[field];
+        });
+
+        if (update.source && !validSources.includes(update.source)) {
+            return NextResponse.json(
+                { message: "Invalid contact source." },
+                { status: 400 }
+            );
+        }
+
+        const updated = await Contact.findByIdAndUpdate(_id, update, {
+            new: true,
+            runValidators: true,
+        });
 
         if (!updated) {
             return NextResponse.json(

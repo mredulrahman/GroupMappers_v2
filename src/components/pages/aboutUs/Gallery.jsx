@@ -13,7 +13,7 @@ import "lightgallery/css/lg-autoplay.css";
 import "lightgallery/css/lg-fullscreen.css";
 import Footer from '../../Footer';
 import Header from '../../Header';
-import { images } from '@/assets/data/galleryPage-data.json';
+import images from '@/assets/data/galleryPage-data.json';
 
 
 const Gallery = () => {

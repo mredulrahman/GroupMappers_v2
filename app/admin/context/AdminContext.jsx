@@ -15,11 +15,13 @@ export const contentTypes = [
   { value: "news", label: "News", queryTypes: ["news"], createType: "news", apiLink: "/api/public/content?type=news" },
   { value: "projects", label: "Projects", queryTypes: ["project", "rabiesPage"], createType: "project", apiLink: "/api/public/content?type=project" },
   { value: "activities", label: "Activities", queryTypes: ["activity"], createType: "activity", apiLink: "/api/public/content?type=activity" },
-  { value: "contact-us", label: "Contact Us", queryTypes: ["contact-us"], createType: "contact-us", apiLink: "/api/public/content?type=contact-us" },
+  { value: "contact-us", label: "Contact Us", queryTypes: ["contact-us"], createType: "contact-us", apiLink: "/api/contact?source=contact-us", contactSource: "contact-us" },
   { value: "donate-us", label: "Donate Us", queryTypes: ["donate-us"], createType: "donate-us", apiLink: "/api/public/content?type=donate-us" },
-  { value: "footer", label: "Footer", queryTypes: ["footer"], createType: "footer", apiLink: "/api/public/content?type=footer" },
-  { value: "contact", label: "Contact", queryTypes: ["contact"], createType: "contact", apiLink: "/api/public/content?type=contact" },
+  { value: "footer", label: "Footer", queryTypes: ["footer"], createType: "footer", apiLink: "/api/contact?source=footer", contactSource: "footer" },
+  { value: "contact", label: "Contact", queryTypes: ["contact"], createType: "contact", apiLink: "/api/contact?source=contact", contactSource: "contact" },
 ];
+
+const contactSources = ["contact-us", "footer", "contact"];
 
 export const formContentTypes = [
   { value: "page", label: "Home / Page" },
@@ -56,6 +58,9 @@ export function getContentApiLink(type, slug = "") {
   if (type === "teamMember") {
     return slug ? `/api/team-members/${slug}` : "/api/team-members";
   }
+  if (contactSources.includes(type)) {
+    return `/api/contact?source=${encodeURIComponent(type)}`;
+  }
   if (slug) {
     return `/api/public/content/${encodeURIComponent(type)}/${encodeURIComponent(slug)}`;
   }
@@ -73,15 +78,15 @@ export const pageItems = [
 ];
 
 export const homeSections = [
-  { id: "slider", label: "Slider", description: "" },
+  { id: "hero", label: "Slider", description: "" },
   { id: "who-we-are", label: "Who We Are", description: "" },
   { id: "mission", label: "Mission", description: "" },
   { id: "what-we-do", label: "What We Do", description: "" },
-  { id: "volunteerism", label: "Volunteerism & Support", description: "" },
+  { id: "volunteerism-and-support", label: "Volunteerism & Support", description: "" },
   { id: "founders", label: "Founders", description: "" },
   { id: "latest-news", label: "Latest News", description: "" },
   { id: "join-our-effort", label: "Join Our Effort", description: "" },
-  { id: "by-the-numbers", label: "By the Number", description: "" },
+  { id: "by-the-number", label: "By the Number", description: "" },
 ];
 
 export const emptyForm = {
@@ -91,7 +96,12 @@ export const emptyForm = {
   status: "draft",
   summary: "",
   body: "",
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
   images: [],
+  blocks: [],
   seoTitle: "",
   seoDescription: "",
 };
@@ -106,6 +116,26 @@ export const emptySectionForm = {
 };
 
 export function formFromItem(item) {
+  if (contactSources.includes(item.type)) {
+    return {
+      type: item.type,
+      slug: item.slug || item.email || item._id || "",
+      title: item.title || item.subject || item.name || "",
+      status: item.status || "new",
+      updatedAt: item.updatedAt,
+      summary: item.summary || item.message || "",
+      body: item.body || item.message || "",
+      name: item.name || "",
+      email: item.email || "",
+      subject: item.subject || "",
+      message: item.message || item.summary || item.body || "",
+      images: [],
+      blocks: [],
+      seoTitle: "",
+      seoDescription: "",
+    };
+  }
+
   const images = Array.isArray(item.images)
     ? item.images.map((img) =>
       typeof img === "string" ? { url: img, alt: "" } : img
@@ -120,21 +150,31 @@ export function formFromItem(item) {
     summary: item.summary || "",
     body: item.body || "",
     images,
+    blocks: Array.isArray(item.blocks) && item.blocks.length
+      ? item.blocks
+      : [
+          ...(item.title ? [{ id: `title-${item._id || "legacy"}`, type: "title", value: item.title }] : []),
+          ...(item.body ? [{ id: `content-${item._id || "legacy"}`, type: "content", value: item.body }] : []),
+        ],
     seoTitle: item.seo?.title || "",
     seoDescription: item.seo?.description || "",
   };
 }
 
 export function payloadFromForm(form) {
+  const blocks = Array.isArray(form.blocks) ? form.blocks : [];
+  const titleBlock = blocks.find((block) => block.type === "title");
+  const contentBlocks = blocks.filter((block) => block.type === "content");
+  const imageBlocks = blocks.filter((block) => block.type === "image" && block.url);
   return {
     type: form.type,
     slug: form.slug,
-    title: form.title,
+    title: titleBlock?.value || form.title || "Untitled",
     status: form.status,
     summary: form.summary,
-    body: form.body,
-    images: form.images.map((img) => img.url).filter(Boolean),
-    blocks: form.images.map((img) => ({ type: "image", url: img.url, alt: img.alt })),
+    body: contentBlocks.map((block) => block.value || "").join("\n"),
+    images: imageBlocks.map((block) => block.url),
+    blocks,
     seo: {
       title: form.seoTitle,
       description: form.seoDescription,
@@ -161,6 +201,19 @@ function normalizeTeamMembers(data) {
   }));
 }
 
+function normalizeContacts(data) {
+  const contacts = data.contacts || [];
+  return contacts.map((item) => ({
+    ...item,
+    _id: item._id,
+    type: item.source || "contact",
+    slug: item.source || item.email || item._id,
+    title: item.subject || item.name || "Contact record",
+    summary: item.message || "",
+    body: item.message || "",
+  }));
+}
+
 const AdminContext = createContext();
 
 export function AdminProvider({ children }) {
@@ -170,7 +223,6 @@ export function AdminProvider({ children }) {
   const [filter, setFilter] = useState("");
   const [message, setMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [search, setSearch] = useState("");
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -182,21 +234,6 @@ export function AdminProvider({ children }) {
   const [isSavingSection, setIsSavingSection] = useState(false);
   const [sectionMessage, setSectionMessage] = useState("");
 
-  const getPreviewUrl = (type, slug) => {
-    if (!slug) return "/";
-    switch (type) {
-      case "page": return `/${slug}`;
-      case "news": return `/news/${slug}`;
-      case "project": return `/service/${slug}`;
-      case "rabiesPage": return `/service/rabies/${slug}`;
-      case "activity": return `/activity/${slug}`;
-      case "teamMember": return `/Team_Members`;
-      case "galleryItem": return `/gallery`;
-      case "contact-us": return `/contact-us`;
-      case "donate-us": return `/fundraising`;
-      default: return `/${slug}`;
-    }
-  };
 
   const headers = {
     "Content-Type": "application/json",
@@ -209,6 +246,9 @@ export function AdminProvider({ children }) {
 
   const handleStatusColor = (status) => {
     switch (status) {
+      case 'new': return '#2563eb';
+      case 'read': return '#0891b2';
+      case 'replied': return '#10b981';
       case 'draft': return '#f59e0b';
       case 'published': return '#10b981';
       case 'archived': return '#6b7280';
@@ -261,6 +301,11 @@ export function AdminProvider({ children }) {
         const data = await res.json();
         if (res.ok) allItems = normalizeTeamMembers(data);
         else throw new Error(data.error || data.message || "Failed to load team members");
+      } else if (filterConfig?.contactSource) {
+        const res = await fetch(`/api/contact?source=${encodeURIComponent(filterConfig.contactSource)}`);
+        const data = await res.json();
+        if (res.ok) allItems = normalizeContacts(data);
+        else throw new Error(data.error || data.message || "Failed to load contact records");
       } else if (filter) {
         const responses = await Promise.all(
           queryTypes.map(async (type) => {
@@ -296,14 +341,26 @@ export function AdminProvider({ children }) {
     const currentForm = overrideStatus ? { ...form, status: overrideStatus } : form;
 
     const isTeamMember = form.type === "teamMember";
-    const baseUrl = isTeamMember ? "/api/team-members" : "/api/admin/content";
-    const url = selectedId ? `${baseUrl}/${selectedId}` : baseUrl;
+    const isContactRecord = contactSources.includes(form.type);
+    const baseUrl = isTeamMember ? "/api/team-members" : isContactRecord ? "/api/contact" : "/api/admin/content";
+    const url = selectedId && !isContactRecord ? `${baseUrl}/${selectedId}` : baseUrl;
     const method = selectedId ? (isTeamMember ? "PUT" : "PATCH") : "POST";
+    const payload = isContactRecord
+      ? {
+        _id: selectedId,
+        name: currentForm.name || currentForm.title,
+        email: currentForm.email,
+        subject: currentForm.subject || currentForm.title,
+        message: currentForm.message || currentForm.body || currentForm.summary,
+        source: currentForm.type,
+        status: currentForm.status,
+      }
+      : payloadFromForm(currentForm);
 
     const response = await fetch(url, {
       method,
       headers,
-      body: JSON.stringify(payloadFromForm(currentForm)),
+      body: JSON.stringify(payload),
     });
 
     const data = await response.json();
@@ -314,7 +371,11 @@ export function AdminProvider({ children }) {
       return;
     }
 
-    const savedItem = isTeamMember ? normalizeTeamMembers({ items: [data.item] })[0] : data.item;
+    const savedItem = isTeamMember
+      ? normalizeTeamMembers({ items: [data.item] })[0]
+      : isContactRecord
+        ? normalizeContacts({ contacts: [data.contact] })[0]
+        : data.item;
     setSelectedId(savedItem._id);
     setIsCreating(false);
     setForm(formFromItem(savedItem));
@@ -328,11 +389,13 @@ export function AdminProvider({ children }) {
   async function handleDelete() {
     if (!selectedId) return;
     const isTeamMember = form.type === "teamMember";
-    const url = isTeamMember ? `/api/team-members/${selectedId}` : `/api/admin/content/${selectedId}`;
+    const isContactRecord = contactSources.includes(form.type);
+    const url = isTeamMember ? `/api/team-members/${selectedId}` : isContactRecord ? "/api/contact" : `/api/admin/content/${selectedId}`;
 
     const response = await fetch(url, {
       method: "DELETE",
       headers,
+      body: isContactRecord ? JSON.stringify({ _id: selectedId }) : undefined,
     });
 
     const data = await response.json();
@@ -350,9 +413,14 @@ export function AdminProvider({ children }) {
 
   async function handleDeleteById(item) {
     const isTeamMember = item.type === "teamMember";
-    const url = isTeamMember ? `/api/team-members/${item._id}` : `/api/admin/content/${item._id}`;
+    const isContactRecord = contactSources.includes(item.type);
+    const url = isTeamMember ? `/api/team-members/${item._id}` : isContactRecord ? "/api/contact" : `/api/admin/content/${item._id}`;
 
-    const response = await fetch(url, { method: "DELETE", headers });
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers,
+      body: isContactRecord ? JSON.stringify({ _id: item._id }) : undefined,
+    });
     const data = await response.json();
 
     if (!response.ok) {
@@ -373,6 +441,29 @@ export function AdminProvider({ children }) {
   }
 
   async function handleArchiveById(item) {
+    if (contactSources.includes(item.type)) {
+      const response = await fetch("/api/contact", {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ _id: item._id, status: "archived" }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || data.message || "Archive failed.");
+        return;
+      }
+
+      if (selectedId === item._id) {
+        setForm((f) => ({ ...f, status: "archived" }));
+      }
+
+      toast.warning(`"${item.title || "Item"}" archived.`);
+      setOpenMenuId(null);
+      await loadItems();
+      return;
+    }
+
     const isTeamMember = item.type === "teamMember";
     const url = isTeamMember ? `/api/team-members/${item._id}` : `/api/admin/content/${item._id}`;
     const method = isTeamMember ? "PUT" : "PATCH";
@@ -469,7 +560,6 @@ export function AdminProvider({ children }) {
     filter, setFilter,
     message, setMessage,
     isSaving, setIsSaving,
-    showPreview, setShowPreview,
     isCreating, setIsCreating,
     search, setSearch,
     deleteTarget, setDeleteTarget,
@@ -479,7 +569,6 @@ export function AdminProvider({ children }) {
     selectedSection, setSelectedSection,
     homeSectionData, setHomeSectionData,
     isSavingSection, sectionMessage, setSectionMessage,
-    getPreviewUrl,
     handleStatusColor,
     handleStatusToast,
     timeAgo,

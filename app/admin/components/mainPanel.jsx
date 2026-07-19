@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Upload, Link, Trash2, GripVertical, Pencil, X, Check, Search, MoveLeft, EllipsisVertical, Archive, Plus, Save } from "lucide-react";
 import { useAdmin } from "../context/AdminContext";
+import UnifiedContentEditor from "./UnifiedContentEditor";
 import {
   activitySlugSequence,
   emptyForm,
@@ -10,7 +11,6 @@ import {
   getContentTypeConfig,
   getContentTypeLabel,
   homeSections,
-  pageItems,
   activityPageItems,
   projectPageItems,
   projectSlugSequence,
@@ -138,6 +138,17 @@ function mergeExpectedPages(items, expectedPages) {
       isPlaceholder: true,
     };
   });
+}
+
+function getHomeSectionPreview(sectionData) {
+  if (!sectionData) return "No saved content yet";
+  if (sectionData.title) return `Title: "${sectionData.title}"`;
+  if (sectionData.slider?.length) return `${sectionData.slider.length} slide(s)`;
+  if (sectionData.cardContent?.length) return `${sectionData.cardContent.length} card(s)`;
+  if (sectionData.accordianContent?.length) return `${sectionData.accordianContent.length} accordion item(s)`;
+  if (sectionData.items?.length) return `${sectionData.items.length} item(s)`;
+  if (sectionData.content) return sectionData.content;
+  return "No preview";
 }
 
 function Field({ label, value, onChange, placeholder = "", type = "text" }) {
@@ -480,17 +491,17 @@ function HomeSectionEditor({ sectionId, homeSectionData, saveHomeSection, isSavi
 
 
 export default function MainPanel() {
+  const showPreview = false;
   const {
     items, filter, setFilter,
     selectedId, setSelectedId,
     form, setForm,
     message, isSaving,
-    showPreview, setShowPreview,
     isCreating, setIsCreating,
     search, setSearch,
     openMenuId, setOpenMenuId,
     selectedPageItem, setSelectedPageItem,
-    sections, setSections,
+    sections,
     selectedSection, setSelectedSection,
     homeSectionData,
     isSavingSection, sectionMessage, setSectionMessage,
@@ -501,10 +512,11 @@ export default function MainPanel() {
 
 
   useEffect(() => {
-    if (selectedPageItem?.label === "Home Page") {
+    if (filter === "home" || selectedPageItem?.label === "Home Page") {
       loadHomeSections();
     }
-  }, [selectedPageItem]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, selectedPageItem]);
 
   const filteredItems = items.filter((item) => {
     const keyword = search.toLowerCase();
@@ -512,7 +524,11 @@ export default function MainPanel() {
       item.title?.toLowerCase().includes(keyword) ||
       item.slug?.toLowerCase().includes(keyword) ||
       item.type?.toLowerCase().includes(keyword) ||
-      item.status?.toLowerCase().includes(keyword)
+      item.status?.toLowerCase().includes(keyword) ||
+      item.name?.toLowerCase().includes(keyword) ||
+      item.email?.toLowerCase().includes(keyword) ||
+      item.subject?.toLowerCase().includes(keyword) ||
+      item.message?.toLowerCase().includes(keyword)
     );
   });
 
@@ -530,11 +546,26 @@ export default function MainPanel() {
         ? orderItemsBySlug(visibleItems, activitySlugSequence)
         : visibleItems;
 
+  const filteredHomeSections = sections.filter((section) => {
+    if (filter !== "home") return true;
+    const keyword = search.toLowerCase();
+    const sectionData = homeSectionData[section.id];
+    return (
+      section.label.toLowerCase().includes(keyword) ||
+      section.id.toLowerCase().includes(keyword) ||
+      section.description?.toLowerCase().includes(keyword) ||
+      sectionData?.title?.toLowerCase().includes(keyword) ||
+      sectionData?.content?.toLowerCase().includes(keyword)
+    );
+  });
+
   const filterConfig = getContentTypeConfig(filter);
   const filterLabel = getContentTypeLabel(filter);
   const createType = filterConfig?.createType || filter || "page";
+  const isContactRecord = ["contact-us", "footer", "contact"].includes(form.type);
+  const isContactFilter = ["contact-us", "footer", "contact"].includes(filter);
 
-  const isEditingHomeSection = selectedPageItem?.label === "Home Page" && selectedSection && isCreating;
+  const isEditingHomeSection = (filter === "home" || selectedPageItem?.label === "Home Page") && selectedSection && isCreating;
 
   return (
     <div className="flex-1 bg-slate-50 flex flex-col overflow-hidden relative">
@@ -586,6 +617,7 @@ export default function MainPanel() {
                   setSelectedId(null);
                   setIsCreating(false);
                   setSelectedPageItem(null);
+                  setSelectedSection(null);
                 }}
                 className={`transition-colors ${selectedId || isCreating || selectedPageItem ? "text-slate-500 hover:text-blue-600 font-medium" : "text-slate-900 font-semibold"}`}
               >
@@ -628,17 +660,14 @@ export default function MainPanel() {
               <span className="font-semibold text-slate-900 truncate max-w-[300px]">New {getContentTypeLabel(form.type)}</span>
             </>
           )}
+          {filter === "home" && selectedSection && isCreating && !selectedPageItem && (
+            <>
+              <span className="text-slate-400">/</span>
+              <span className="font-semibold text-slate-900">{selectedSection.label}</span>
+            </>
+          )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setShowPreview(!showPreview)}
-            className={`rounded px-4 py-1.5 text-sm font-medium transition-colors ${showPreview ? "bg-slate-200 text-slate-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}`}
-          >
-            {showPreview ? "Hide Preview" : "Preview"}
-          </button>
-        </div>
       </div>
 
 
@@ -712,18 +741,20 @@ export default function MainPanel() {
           <div className="p-6 max-w-6xl mx-auto flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <h2 className="text-2xl font-bold text-slate-800">
-                {filter ? `${filterLabel} Items` : "All Content"}
+                {filter === "home" ? "Home Sections" : filter ? `${filterLabel} Items` : "All Content"}
               </h2>
               <div className="flex gap-2">
-                <button onClick={handleSeed} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Import JSON</button>
-                <button onClick={() => loadItems()} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Refresh</button>
-                <button
-                  onClick={() => { setSelectedId(null); setIsCreating(true); setForm({ ...emptyForm, type: createType }); }}
-                  className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
-                  type="button"
-                >
-                  + New {filter ? filterLabel : "content"}
-                </button>
+                {filter !== "home" && !isContactFilter && <button onClick={handleSeed} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Import JSON</button>}
+                <button onClick={() => filter === "home" ? loadHomeSections() : loadItems()} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Refresh</button>
+                {filter !== "home" && !isContactFilter && (
+                  <button
+                    onClick={() => { setSelectedId(null); setIsCreating(true); setForm({ ...emptyForm, type: createType }); }}
+                    className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
+                    type="button"
+                  >
+                    + New {filter ? filterLabel : "content"}
+                  </button>
+                )}
               </div>
             </div>
             <div className="relative group w-[300px] sm:max-w-md transition-all ml-auto mt-5">
@@ -739,58 +770,41 @@ export default function MainPanel() {
               />
             </div>
             {filter === "home" ? (
-              <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200">
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600">Page</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden sm:table-cell">Description</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden md:table-cell">Slug</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600">Status</th>
-                      <th className="text-left px-5 py-3 font-semibold text-slate-600 hidden lg:table-cell">Last Updated</th>
-                      <th className="px-5 py-3"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pageItems.map((pageItem) => {
-                      const dbItem = items.find((i) => i.slug === pageItem.slug && i.type === "page");
-                      const isHomePage = pageItem.label === "Home Page";
-                      return (
-                        <tr
-                          key={pageItem.slug}
-                          onClick={() => {
-                            if (isHomePage) {
-                              setSelectedPageItem(pageItem);
-                              setSections(homeSections);
-                            } else if (dbItem) {
-                              selectItem(dbItem);
-                            } else {
-                              setSelectedId(null);
-                              setIsCreating(true);
-                              setForm({ ...emptyForm, type: "page", slug: pageItem.slug, title: pageItem.label });
-                            }
-                          }}
-                          className="border-b border-slate-100 last:border-0 hover:bg-blue-50/50 cursor-pointer transition-colors group"
-                        >
-                          <td className="px-5 py-4"><span className="font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">{pageItem.label}</span></td>
-                          <td className="px-5 py-4 text-slate-500 hidden sm:table-cell">{pageItem.description}</td>
-                          <td className="px-5 py-4 hidden md:table-cell"><code className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-mono">/{pageItem.slug}</code></td>
-                          <td className="px-5 py-4">
-                            {isHomePage ? (
-                              <span className="text-xs font-medium px-2 py-1 rounded bg-green-100 text-green-600">live</span>
-                            ) : dbItem ? (
-                              <span className="text-xs font-medium px-2 py-1 rounded capitalize" style={{ color: handleStatusColor(dbItem.status), backgroundColor: `${handleStatusColor(dbItem.status)}15` }}>{dbItem.status}</span>
-                            ) : (
-                              <span className="text-xs font-medium px-2 py-1 rounded bg-slate-100 text-slate-400">not created</span>
-                            )}
-                          </td>
-                          <td className="px-5 py-4 text-slate-400 text-xs hidden lg:table-cell">{dbItem?.updatedAt ? timeAgo(dbItem.updatedAt) : "—"}</td>
-                          <td className="px-5 py-4 text-right"><span className="text-xs text-blue-600 group-hover:underline font-medium">{isHomePage ? "View Sections →" : dbItem ? "Edit →" : "Create →"}</span></td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredHomeSections.map((section, idx) => {
+                  const sectionData = homeSectionData[section.id];
+                  return (
+                    <div
+                      key={section.id}
+                      onClick={() => {
+                        setSelectedSection(section);
+                        setIsCreating(true);
+                        setSectionMessage("");
+                      }}
+                      className="group relative bg-white rounded-lg border border-slate-200 p-4 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all flex flex-col h-[140px]"
+                    >
+                      <div className="flex-1 min-h-0">
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="font-semibold text-slate-900 truncate group-hover:text-blue-700 transition-colors">{section.label}</h3>
+                          <span className="flex-shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600">
+                            {idx + 1}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-500 mt-2 line-clamp-2">{getHomeSectionPreview(sectionData)}</p>
+                      </div>
+                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 flex-shrink-0">
+                        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">{section.id}</span>
+                        <span className="text-xs font-medium text-blue-600 group-hover:underline">Edit</span>
+                      </div>
+                    </div>
+                  );
+                })}
+                {filteredHomeSections.length === 0 && (
+                  <div className="md:col-span-2 lg:col-span-3 xl:col-span-4 bg-white rounded-lg border border-slate-200 p-12 text-center shadow-sm">
+                    <h3 className="text-lg font-medium text-slate-900">No sections found</h3>
+                    <p className="text-slate-500 mt-1">Try a different search term.</p>
+                  </div>
+                )}
               </div>
             ) : orderedItems.length === 0 ? (
               <div className="bg-white rounded-lg border border-slate-200 p-12 text-center shadow-sm">
@@ -801,7 +815,7 @@ export default function MainPanel() {
                 <p className="text-slate-500 mt-1">Get started by creating a new item or importing existing data.</p>
               </div>
             ) : (
-              <div className={`grid grid-cols-1 gap-4 ${showPreview ? "xl:grid-cols-3 lg:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}`}>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {openMenuId && <div className="fixed inset-0 z-10" onClick={() => setOpenMenuId(null)} />}
                 {orderedItems.map((item) => (
                   <div
@@ -857,16 +871,35 @@ export default function MainPanel() {
             )}
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-max">
+          <>
+            <UnifiedContentEditor
+              form={form}
+              setForm={setForm}
+              message={message}
+              isSaving={isSaving}
+              updatedLabel={form.updatedAt ? `Updated ${timeAgo(form.updatedAt)}` : ""}
+              onSubmit={handleSubmit}
+            />
+            {false && <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-max">
             <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-6 py-3 border-b border-slate-200 shadow-sm flex-shrink-0">
               <div className="flex items-center gap-4">
                 {form.updatedAt && <span className="text-xs text-slate-500 hidden sm:inline-block">Updated {timeAgo(form.updatedAt)}</span>}
                 {message && <span className="text-sm font-medium text-blue-600">{message}</span>}
               </div>
               <div className="flex items-center gap-3">
-                <button disabled={isSaving} onClick={(e) => handleSubmit(e, "archived")} className="rounded border border-slate-300 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60 transition-colors shadow-sm" type="button">Archive</button>
-                <button disabled={isSaving} onClick={(e) => handleSubmit(e, "draft")} className="rounded border border-amber-300 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700 hover:bg-amber-100 disabled:opacity-60 transition-colors shadow-sm" type="button">Save as Draft</button>
-                <button disabled={isSaving} onClick={(e) => handleSubmit(e, "published")} className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm" type="button">Publish Changes</button>
+                {isContactRecord ? (
+                  <>
+                    <button disabled={isSaving} onClick={(e) => handleSubmit(e, "archived")} className="rounded border border-slate-300 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60 transition-colors shadow-sm" type="button">Archive</button>
+                    <button disabled={isSaving} onClick={(e) => handleSubmit(e, "read")} className="rounded border border-cyan-300 bg-cyan-50 px-4 py-1.5 text-sm font-medium text-cyan-700 hover:bg-cyan-100 disabled:opacity-60 transition-colors shadow-sm" type="button">Mark Read</button>
+                    <button disabled={isSaving} className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm" type="submit">Save Changes</button>
+                  </>
+                ) : (
+                  <>
+                    <button disabled={isSaving} onClick={(e) => handleSubmit(e, "archived")} className="rounded border border-slate-300 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60 transition-colors shadow-sm" type="button">Archive</button>
+                    <button disabled={isSaving} onClick={(e) => handleSubmit(e, "draft")} className="rounded border border-amber-300 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700 hover:bg-amber-100 disabled:opacity-60 transition-colors shadow-sm" type="button">Save as Draft</button>
+                    <button disabled={isSaving} onClick={(e) => handleSubmit(e, "published")} className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm" type="button">Publish Changes</button>
+                  </>
+                )}
               </div>
             </div>
 
@@ -878,37 +911,73 @@ export default function MainPanel() {
                     {formContentTypes.map((type) => (<option key={type.value} value={type.value}>{type.label}</option>))}
                   </select>
                 </label>
-                <label className="grid gap-1.5 text-sm font-medium text-slate-700">
-                  Slug
-                  <input value={form.slug} onChange={(event) => setForm({ ...form, slug: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" placeholder="example-page" />
-                </label>
+                {isContactRecord ? (
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Status
+                    <select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white">
+                      <option value="new">New</option>
+                      <option value="read">Read</option>
+                      <option value="replied">Replied</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </label>
+                ) : (
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Slug
+                    <input value={form.slug} onChange={(event) => setForm({ ...form, slug: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" placeholder="example-page" />
+                  </label>
+                )}
               </div>
               <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
                 <span className="font-medium text-slate-700">Existing API link: </span>
                 <code className="break-all text-xs text-blue-700">{getContentApiLink(form.type, form.slug)}</code>
               </div>
-              <label className="grid gap-1.5 text-sm font-medium text-slate-700">
-                Title
-                <input value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-lg bg-white" />
-              </label>
-              <label className="grid gap-1.5 text-sm font-medium text-slate-700">
-                Summary
-                <textarea value={form.summary} onChange={(event) => setForm({ ...form, summary: event.target.value })} className="min-h-[80px] rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
-              </label>
-              <label className="grid gap-1.5 text-sm font-medium text-slate-700">
-                Body
-                <textarea value={form.body} onChange={(event) => setForm({ ...form, body: event.target.value })} placeholder="Markdown or HTML content..." className="min-h-[400px] rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
-              </label>
-              <div className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
-                <ImageManager images={form.images} onChange={(images) => setForm({ ...form, images })} />
-              </div>
-              <div className={`rounded-md border border-slate-200 bg-white p-4 shadow-sm grid gap-4 ${showPreview ? "xl:grid-cols-2" : "md:grid-cols-2"}`}>
-                <div className="col-span-full"><h3 className="font-semibold text-slate-800 text-sm">SEO Metadata</h3></div>
-                <label className="grid gap-1.5 text-sm font-medium text-slate-700">SEO Title<input value={form.seoTitle} onChange={(event) => setForm({ ...form, seoTitle: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none" /></label>
-                <label className="grid gap-1.5 text-sm font-medium text-slate-700">SEO Description<input value={form.seoDescription} onChange={(event) => setForm({ ...form, seoDescription: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none" /></label>
-              </div>
+              {isContactRecord ? (
+                <>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Name
+                    <input value={form.name || ""} onChange={(event) => setForm({ ...form, name: event.target.value, title: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-lg bg-white" />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Email
+                    <input type="email" value={form.email || ""} onChange={(event) => setForm({ ...form, email: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Subject
+                    <input value={form.subject || ""} onChange={(event) => setForm({ ...form, subject: event.target.value, title: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Message / Data
+                    <textarea value={form.message || ""} onChange={(event) => setForm({ ...form, message: event.target.value, summary: event.target.value, body: event.target.value })} className="min-h-[260px] rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Title
+                    <input value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-lg bg-white" />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Summary
+                    <textarea value={form.summary} onChange={(event) => setForm({ ...form, summary: event.target.value })} className="min-h-[80px] rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+                    Body
+                    <textarea value={form.body} onChange={(event) => setForm({ ...form, body: event.target.value })} placeholder="Markdown or HTML content..." className="min-h-[400px] rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none bg-white" />
+                  </label>
+                  <div className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
+                    <ImageManager images={form.images} onChange={(images) => setForm({ ...form, images })} />
+                  </div>
+                  <div className={`rounded-md border border-slate-200 bg-white p-4 shadow-sm grid gap-4 ${showPreview ? "xl:grid-cols-2" : "md:grid-cols-2"}`}>
+                    <div className="col-span-full"><h3 className="font-semibold text-slate-800 text-sm">SEO Metadata</h3></div>
+                    <label className="grid gap-1.5 text-sm font-medium text-slate-700">SEO Title<input value={form.seoTitle} onChange={(event) => setForm({ ...form, seoTitle: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none" /></label>
+                    <label className="grid gap-1.5 text-sm font-medium text-slate-700">SEO Description<input value={form.seoDescription} onChange={(event) => setForm({ ...form, seoDescription: event.target.value })} className="rounded-md border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none" /></label>
+                  </div>
+                </>
+              )}
             </div>
-          </form>
+          </form>}
+          </>
         )}
       </div>
     </div>

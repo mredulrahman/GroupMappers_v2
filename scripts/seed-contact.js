@@ -53,7 +53,7 @@ const contactSeedItems = [
         email: contactData.email,
         subject: "Default contact form recipient",
         message: `Contact form submissions should be sent to ${contactData.email}.`,
-        source: "contact-form",
+        source: "contact",
         status: "new",
     },
 ];
@@ -65,11 +65,21 @@ async function seed() {
         });
         console.log("✅ Connected to:", mongoose.connection.db.databaseName);
 
-        await Contact.deleteMany({});
-        console.log("🗑️  Cleared existing contact submissions");
+        const results = await Promise.all(
+            contactSeedItems.map((item) =>
+                Contact.findOneAndUpdate(
+                    { source: item.source, email: item.email },
+                    item,
+                    {
+                        new: true,
+                        upsert: true,
+                        runValidators: true,
+                    }
+                )
+            )
+        );
 
-        const inserted = await Contact.insertMany(contactSeedItems);
-        console.log(`✅ Inserted ${inserted.length} contact records from contact-data.json`);
+        console.log(`✅ Upserted ${results.length} contact records from contact-data.json`);
 
         await mongoose.connection.close();
         process.exit(0);

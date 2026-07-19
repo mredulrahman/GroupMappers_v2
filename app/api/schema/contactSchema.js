@@ -26,8 +26,8 @@ const ContactSchema = new mongoose.Schema(
         },
         source: {
             type: String,
-            enum: ["contact-us", "footer", "contact-form"],
-            default: "contact-form",
+            enum: ["contact-us", "footer", "contact", "contact-form"],
+            default: "contact",
         },
         status: {
             type: String,
