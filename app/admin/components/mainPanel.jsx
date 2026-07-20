@@ -746,13 +746,13 @@ export default function MainPanel() {
               <div className="flex gap-2">
                 {filter !== "home" && !isContactFilter && <button onClick={handleSeed} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Import JSON</button>}
                 <button onClick={() => filter === "home" ? loadHomeSections() : loadItems()} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" type="button">Refresh</button>
-                {filter !== "home" && !isContactFilter && (
+                {!filter && (
                   <button
                     onClick={() => { setSelectedId(null); setIsCreating(true); setForm({ ...emptyForm, type: createType }); }}
                     className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
                     type="button"
                   >
-                    + New {filter ? filterLabel : "content"}
+                    + New content
                   </button>
                 )}
               </div>

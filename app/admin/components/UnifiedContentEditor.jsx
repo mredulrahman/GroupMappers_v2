@@ -4,18 +4,22 @@ import { useEffect, useRef, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TiptapLink from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Color from "@tiptap/extension-color";
+import { TextStyle } from "@tiptap/extension-text-style";
 import * as FaIcons from "react-icons/fa6";
 import {
-  AlignLeft, Archive, Bold, ChevronDown, Code2, Copy, Heading2, Image,
-  Italic, Link, List, ListOrdered, MessageSquareQuote, PanelTop,
-  Plus, Save, Send, Trash2,
+  AlignCenter, AlignJustify, AlignLeft, AlignRight, Archive, Bold, ChevronDown,
+  Code2, Copy, Image, Italic, Link, Link2, MessageSquareQuote, Palette,
+  PanelTop, Plus, Quote, Save, Send, Tag, Trash2, Underline as UnderlineIcon,
 } from "lucide-react";
 import { getContentApiLink } from "../context/AdminContext";
 
 const blockOptions = [
-  ["title", "Title", Heading2], ["image", "Image", Image], ["content", "Content", AlignLeft],
+  ["title", "Label", Tag], ["image", "Image", Image], ["content", "Content", AlignLeft],
   ["accordion", "Accordion", ChevronDown], ["button", "Button", PanelTop],
-  ["embedLink", "Embed link", Code2], ["quote", "Quote", MessageSquareQuote],
+  ["embedLink", "Embed", Code2], ["quote", "Quote", MessageSquareQuote],
   ["icon", "Icon", Plus], ["link", "Link", Link], ["card", "Card", PanelTop],
 ];
 
@@ -23,28 +27,78 @@ const inputClass = "w-full rounded-xl border border-slate-200 bg-white px-3 py-2
 const roundButton = "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold transition disabled:opacity-50";
 
 function RichText({ value = "", onChange }) {
+  const [, refreshToolbar] = useState(0);
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [StarterKit, TiptapLink.configure({ openOnClick: false })],
+    extensions: [
+      StarterKit.configure({ link: false }),
+      TiptapLink.configure({ openOnClick: false }),
+      Underline,
+      TextStyle,
+      Color,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
+    editorProps: {
+      attributes: {
+        class: "min-h-36 outline-none",
+      },
+    },
     content: value,
-    onUpdate: ({ editor: instance }) => onChange(instance.getHTML()),
+    onUpdate: ({ editor: instance }) => {
+      onChange(instance.getHTML());
+      refreshToolbar((version) => version + 1);
+    },
+    onSelectionUpdate: () => refreshToolbar((version) => version + 1),
   });
   useEffect(() => {
     if (editor && value !== editor.getHTML()) editor.commands.setContent(value || "", { emitUpdate: false });
   }, [editor, value]);
   if (!editor) return null;
-  const tools = [
-    [Bold, () => editor.chain().focus().toggleBold().run(), editor.isActive("bold"), "Bold"],
-    [Italic, () => editor.chain().focus().toggleItalic().run(), editor.isActive("italic"), "Italic"],
-    [Heading2, () => editor.chain().focus().toggleHeading({ level: 2 }).run(), editor.isActive("heading", { level: 2 }), "Heading"],
-    [List, () => editor.chain().focus().toggleBulletList().run(), editor.isActive("bulletList"), "Bullet list"],
-    [ListOrdered, () => editor.chain().focus().toggleOrderedList().run(), editor.isActive("orderedList"), "Numbered list"],
-  ];
+  const iconButton = (active = false) => `grid h-8 w-8 place-items-center rounded-full transition ${active ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-white hover:text-blue-600"}`;
+  const currentHeading = [1, 2, 3, 4].find((level) => editor.isActive("heading", { level })) || "paragraph";
+  const currentList = editor.isActive("bulletList") ? "bullet" : editor.isActive("orderedList") ? "numbered" : "none";
+  function setHeading(nextValue) {
+    const chain = editor.chain().focus();
+    if (nextValue === "paragraph") chain.setParagraph().run();
+    else chain.setHeading({ level: Number(nextValue) }).run();
+  }
+  function setList(nextValue) {
+    if (nextValue === "bullet") editor.chain().focus().toggleBulletList().run();
+    else if (nextValue === "numbered") editor.chain().focus().toggleOrderedList().run();
+    else if (currentList === "bullet") editor.chain().focus().toggleBulletList().run();
+    else if (currentList === "numbered") editor.chain().focus().toggleOrderedList().run();
+  }
+  function editLink() {
+    const previousUrl = editor.getAttributes("link").href || "";
+    const url = window.prompt("Enter link URL (leave empty to remove):", previousUrl);
+    if (url === null) return;
+    if (!url.trim()) editor.chain().focus().extendMarkRange("link").unsetLink().run();
+    else editor.chain().focus().extendMarkRange("link").setLink({ href: url.trim() }).run();
+  }
   return <div className="overflow-hidden rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100">
-    <div className="flex flex-wrap gap-1 border-b border-slate-100 bg-slate-50 p-2">
-      {tools.map(([Icon, action, active, label]) => <button key={label} type="button" title={label} onClick={action} className={`grid h-8 w-8 place-items-center rounded-full ${active ? "bg-blue-600 text-white" : "text-slate-600 hover:bg-white"}`}><Icon size={15} /></button>)}
+    <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-100 bg-slate-50 p-2">
+      <select aria-label="Heading style" title="Heading style" value={currentHeading} onChange={(event) => setHeading(event.target.value)} className="h-8 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none focus:border-blue-400">
+        <option value="paragraph">Paragraph</option>
+        <option value="1">Heading 1</option><option value="2">Heading 2</option>
+        <option value="3">Heading 3</option><option value="4">Heading 4</option>
+      </select>
+      <select aria-label="List style" title="List style" value={currentList} onChange={(event) => setList(event.target.value)} className="h-8 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 outline-none focus:border-blue-400">
+        <option value="none">No list</option><option value="bullet">Bullet list</option><option value="numbered">Numbered list</option>
+      </select>
+      <span className="mx-0.5 h-5 w-px bg-slate-200" />
+      <button type="button" title="Bold" aria-pressed={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()} className={iconButton(editor.isActive("bold"))}><Bold size={15} /></button>
+      <button type="button" title="Italic" aria-pressed={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()} className={iconButton(editor.isActive("italic"))}><Italic size={15} /></button>
+      <button type="button" title="Underline" aria-pressed={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()} className={iconButton(editor.isActive("underline"))}><UnderlineIcon size={15} /></button>
+      <button type="button" title="Blockquote" aria-pressed={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()} className={iconButton(editor.isActive("blockquote"))}><Quote size={15} /></button>
+      <button type="button" title="Add or edit link" aria-pressed={editor.isActive("link")} onClick={editLink} className={iconButton(editor.isActive("link"))}><Link2 size={15} /></button>
+      <label title="Text color" className={`${iconButton(Boolean(editor.getAttributes("textStyle").color))} relative cursor-pointer`}><Palette size={15} /><input aria-label="Text color" type="color" value={editor.getAttributes("textStyle").color || "#0f172a"} onChange={(event) => editor.chain().focus().setColor(event.target.value).run()} className="absolute inset-0 cursor-pointer opacity-0" /></label>
+      <span className="mx-0.5 h-5 w-px bg-slate-200" />
+      {[["left", AlignLeft], ["center", AlignCenter], ["right", AlignRight], ["justify", AlignJustify]].map(([alignment, Icon]) => <button key={alignment} type="button" title={`Align ${alignment}`} aria-pressed={editor.isActive({ textAlign: alignment })} onClick={() => editor.chain().focus().setTextAlign(alignment).run()} className={iconButton(editor.isActive({ textAlign: alignment }))}><Icon size={15} /></button>)}
     </div>
-    <EditorContent editor={editor} className="prose prose-slate max-w-none min-h-44 px-4 py-3 text-sm [&_.tiptap]:min-h-36 [&_.tiptap]:outline-none" />
+    <EditorContent
+      editor={editor}
+      className="min-h-44 px-4 py-3 text-sm text-slate-700 [&_.tiptap_a]:text-blue-600 [&_.tiptap_a]:underline [&_.tiptap_blockquote]:my-3 [&_.tiptap_blockquote]:border-l-4 [&_.tiptap_blockquote]:border-blue-300 [&_.tiptap_blockquote]:pl-4 [&_.tiptap_blockquote]:italic [&_.tiptap_h1]:mb-3 [&_.tiptap_h1]:mt-5 [&_.tiptap_h1]:text-3xl [&_.tiptap_h1]:font-bold [&_.tiptap_h2]:mb-2 [&_.tiptap_h2]:mt-4 [&_.tiptap_h2]:text-2xl [&_.tiptap_h2]:font-bold [&_.tiptap_h3]:mb-2 [&_.tiptap_h3]:mt-3 [&_.tiptap_h3]:text-xl [&_.tiptap_h3]:font-semibold [&_.tiptap_h4]:mb-2 [&_.tiptap_h4]:mt-3 [&_.tiptap_h4]:text-lg [&_.tiptap_h4]:font-semibold [&_.tiptap_ol]:my-3 [&_.tiptap_ol]:list-decimal [&_.tiptap_ol]:pl-6 [&_.tiptap_p]:my-2 [&_.tiptap_ul]:my-3 [&_.tiptap_ul]:list-disc [&_.tiptap_ul]:pl-6"
+    />
   </div>;
 }
 
@@ -71,7 +125,7 @@ function ImageFields({ block, update }) {
 }
 
 function BlockFields({ block, update }) {
-  if (block.type === "title") return <Field label="Title"><input className={`${inputClass} text-lg font-semibold`} value={block.value || ""} onChange={(e) => update({ value: e.target.value })} placeholder="Add a title" /></Field>;
+  if (block.type === "title") return <Field label="Label"><input className={`${inputClass} text-lg font-semibold`} value={block.value || ""} onChange={(e) => update({ value: e.target.value })} placeholder="Add a label" /></Field>;
   if (block.type === "content") return <RichText value={block.value} onChange={(value) => update({ value })} />;
   if (block.type === "image") return <ImageFields block={block} update={update} />;
   if (block.type === "accordion") return <div className="grid gap-3"><Field label="Accordion title"><input className={inputClass} value={block.title || ""} onChange={(e) => update({ title: e.target.value })} /></Field><Field label="Accordion content"><RichText value={block.content} onChange={(content) => update({ content })} /></Field></div>;
@@ -103,14 +157,14 @@ export default function UnifiedContentEditor({ form, setForm, message, isSaving,
         <Field label="Slug"><input required className={inputClass} value={form.slug || ""} onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })} placeholder="page-slug" /></Field>
         {blocks.length === 0 && <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-white px-6 py-16 text-center"><Plus className="mx-auto mb-3 text-slate-300" /><p className="font-semibold text-slate-700">Build your content</p><p className="mt-1 text-sm text-slate-400">Choose a block from the form sidebar.</p></div>}
         {blocks.map((block, index) => <section key={block.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center justify-between"><div className="flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-600">{index + 1}</span><span className="text-sm font-bold capitalize text-slate-700">{block.type === "embedLink" ? "Embed link" : block.type}</span></div><button type="button" onClick={() => removeBlock(block.id)} className="grid h-9 w-9 place-items-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-600"><Trash2 size={16} /></button></div>
+          <div className="mb-4 flex items-center justify-between"><div className="flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-full bg-blue-50 text-xs font-bold text-blue-600">{index + 1}</span><span className="text-sm font-bold capitalize text-slate-700">{block.type === "title" ? "Label" : block.type === "embedLink" ? "Embed link" : block.type}</span></div><button type="button" onClick={() => removeBlock(block.id)} className="grid h-9 w-9 place-items-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-600"><Trash2 size={16} /></button></div>
           <BlockFields block={block} update={(patch) => updateBlock(block.id, patch)} />
         </section>)}
       </main>
       <aside className="border-l border-slate-200 bg-white p-5 xl:sticky xl:top-0 xl:h-[calc(100vh-113px)] xl:overflow-y-auto">
-        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">Form actions</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">actions</p>
         <button type="button" onClick={copyApi} className={`${roundButton} mb-5 w-full bg-slate-100 text-slate-700 hover:bg-slate-200`}><Copy size={15} /> {copied ? "API copied" : "Copy API link"}</button>
-        <div className="grid grid-cols-2 gap-2">{blockOptions.map(([type, label, Icon]) => <button key={type} type="button" onClick={() => addBlock(type)} className={`${roundButton} border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700`}><Icon size={15} /> +{label}</button>)}</div>
+        <div className="grid grid-cols-2 gap-2">{blockOptions.map(([type, label, Icon]) => <button key={type} type="button" onClick={() => addBlock(type)} className={`${roundButton} border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700`}><Icon size={15} /> {label}</button>)}</div>
         <div className="my-5 h-px bg-slate-100" />
         <div className="grid gap-2"><button disabled={isSaving} type="button" onClick={(e) => onSubmit(e, "archived")} className={`${roundButton} bg-slate-100 text-slate-700 hover:bg-slate-200`}><Archive size={15} /> Archive</button><button disabled={isSaving} type="button" onClick={(e) => onSubmit(e, "draft")} className={`${roundButton} bg-amber-50 text-amber-700 hover:bg-amber-100`}><Save size={15} /> Save draft</button><button disabled={isSaving} type="button" onClick={(e) => onSubmit(e, "published")} className={`${roundButton} bg-blue-600 text-white hover:bg-blue-700`}><Send size={15} /> Publish</button></div>
       </aside>
